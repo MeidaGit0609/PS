@@ -22,7 +22,20 @@ function generate_email_code($username) {
     return $code;
 }
 
-// Ищет пользователя в базе по паролю
+// Ищет пользователя в базе по id
+function get_user_id_by_id($id) {
+    global $connection;
+
+    $sql = "SELECT * FROM `users` WHERE `id` = '$id'";
+
+    $result = mysqli_query($connection, $sql);
+
+    $user = mysqli_fetch_assoc($result);
+
+    return $user;
+}
+
+// Ищет пользователя в базе по username'y
 function get_user_id_by_username($username) {
     global $connection;
 

@@ -1,0 +1,88 @@
+/* ==================
+Топ 10 и главная
+======================*/
+
+.mini-post {
+    position: relative;
+}
+
+.post_img {
+    min-height: 100%;
+    min-width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+    position: relative;
+
+    color: inherit !important;
+}
+
+.post_img img {
+    min-height: 100%;
+    min-width: 100%;
+}
+
+.post_sub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    opacity: 0;
+    background-color: #000;
+
+    font-size: 50px;
+
+    transition: opacity .3s ease;
+}
+
+.post_sub span,
+.post_sub{
+    color: #fff;
+}
+
+.post_sub:hover {
+    opacity: 0.6;
+}
+
+.pageBtn {
+    padding: 5px;
+    transform: translateY(-5px);
+
+    border: #d2d2d2;
+    background-color: #d2d2d2;
+}
+
+.stat_item {
+    margin-left: 10px;
+}
+.stat_item:first-child {
+    margin-left: 0;
+}
+
+.like {
+    display: inline-block;
+    /*transform: translateY(0);*/
+}
+
+.like button {
+    padding: 0;
+
+    background: none;
+    border: none;
+}
+
+.like i {
+    color: #d2d2d2;
+}
+
+.like .active i {
+    color: #ed4956 !important;
+}
+
