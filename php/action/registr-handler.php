@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../functions/user_functions.php';
 
 $header = 'Location: ../../pages/registration.php?regist=';
@@ -6,17 +7,22 @@ $header = 'Location: ../../pages/registration.php?regist=';
 if(count($_POST) > 0) {
     $user_name       = htmlspecialchars(trim($_POST['user_name']));
     $name_surname    = htmlspecialchars(trim($_POST['name_and_surname']));
-    $email_phone     = htmlspecialchars(trim($_POST['email_or_phone']));
+    $email           = htmlspecialchars(trim($_POST['email']));
     $password        = htmlspecialchars($_POST['password']);
     $password_repeat = htmlspecialchars($_POST['password-repeat']);
     $password_code   = md5($password);
 
-    if(preg_match("/@/",$email_phone)) {
-        $email = $email_phone;
-    }
-    else {
-        $phone = $email_phone;
-    }
+
+
+//    if(preg_match("/@/",$email_phone)) {
+//        $email = $email_phone;
+//    }
+//    else {
+//        $phone = $email_phone;
+//    }
+
+
+    $_SESSION['code'] = generate_email_code($user_name);
 
     $user_id_array = get_user_id_by_username($user_name);
     $user_id = $user_id_array['id'];
@@ -24,10 +30,7 @@ if(count($_POST) > 0) {
     if(str_word_count($name_surname) < 2 ||  strlen($name_surname) < 5) {
         $header .= 'name_surname-fail';
     }
-    elseif(isset($phone) && !preg_match("/((8|\+7)-?)?\(?\d{3,5}\)?-?\d{1}-?\d{1}-?\d{1}-?\d{1}-?\d{1}((-?\d{1})?-?\d{1})?/", $email_phone)) {
-        $header .= 'phone-fail';
-    }
-    elseif(isset($email) && !filter_var($email_phone, FILTER_VALIDATE_EMAIL)) {
+    elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $header .= 'email-fail';
     }
     elseif(strlen($user_name) <= 2 || is_numeric($user_name)) {
@@ -43,18 +46,22 @@ if(count($_POST) > 0) {
         $header .= 'user_repeat';
     }
     else {
-        add_user($name_surname, $email, $phone, $user_name, $password_code);
+        $subject = 'Подтвердите код регистрации';
+        $message = "Добро пожаловать  в PS!! \n От пользования великолепным сервисом вас отгораждает только этот код: ${_SESSION['code']}";
+        mail($email, $subject, $message);
 
-        $header .= 'happy';
+        $_SESSION['username']     = $user_name;
+        $_SESSION['name_surname'] = $name_surname;
+        $_SESSION['password']     = $password_code;
+        $_SESSION['email']        = $email;
 
-        $user_id_array = get_user_id_by_username($user_name);
-        $user_id = $user_id_array['id'];
-
-        setcookie('user', $user_id, time() + 7 * 64 * 64 * 24 * 365 * 365, '/');
+        $header .= 'code';
     }
+
 }
 else {
     $header .= 'not';
 }
+
 
 header($header);
