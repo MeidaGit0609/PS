@@ -15,18 +15,17 @@ $user_id = $_COOKIE['user'];
 if($user_id) :
 ?>
 <div class="container">
-    <p>Ваше имя и фамилия: <?=$user['name_surname'] ?></p>
-    <p>Ваш ник: <?=$user['username'] ?></p>
+    <p>Ваше имя и фамилия: <?=$user['name_surname'] ?> <a href="change_password.php">изменить имя и фамилию</a>  </p>
+    <p>Ваш ник: <?=$user['username'] ?> <a href="change_password.php">изменить ник</a>  </p>
+    <p>
     <?PHP
-    if($user['phone'] == 'Телефон не указан') {
-        echo "<p>${user['phone']}</p>";
-    }
-    else {
-        echo "<p>Ваш номер телефона: ${user['phone']}</p>";
-    }
+    if($user['phone'] == 'Телефон не указан') echo "${user['phone']}";
+    else echo "Ваш номер телефона: ${user['phone']} ";
     ?>
-    <p>Ваш электронный адрес: <?=$user['email'] ?></p>
-    <a href="change_password.php">Изменить пароль</a>
+    <a href="change_password.php">изменить номер телефона</a>
+    </p>
+    <p>Ваш электронный адрес: <?=$user['email'] ?> <a href="change_password.php">изменить email</a></p>
+    <a href="change_password.php">изменить пароль</a>
 </div>
 <?php else : ?>
     <div class="alert">Вы не вошли в свой аккаунт или не создали его</div>
