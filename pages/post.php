@@ -146,6 +146,39 @@ $comments_num = count($comments);
                 </p>
             </div>
             <?php if($comments_num < 4) : ?>
+                <div class="comments modal-body">
+                    <?php
+                    // $comments это Массив со всеми комментариями
+                    foreach($comments as $comment) :
+                        $user_info = user_by_id($comment['user_id']);
+                        if($user_info == null) {
+                            continue;
+                        }
+                        else {
+                            ?>
+                            <div class="comment">
+                                <div class="comment__avatar">
+                                    <img src="<?=$user_info['avatar'] ?>" alt="">
+                                </div>
+                                <div class="comment__body">
+                                    <h3 class="comment__name"><?=$user_info['username'] ?>
+                                    </h3>
+                                    <p class="comment__text"><?=$comment['text'] ?></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <?php
+                        }
+                    endforeach;
+                    ?>
+                    <form class="" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
+                        <?=$_GET['comment'] == 'login_fail' ? "Вы не авторизованы <br>" : '' ?>
+                        <?=$_GET['comment'] == 'text_fail' ? "Слишком короткий комментарий (минимум 2 символа) <br>" : '' ?>
+                        <?=$_GET['comment'] == 'happy' ? "Спасибо за комментарий <br>" : '' ?>
+                        <input type="text" name="text" placeholder="Ваш комментарий" class="form-control d-inline">
+                        <button type="submit" class="btn btn-md btn-primary mt-2">Отправить</button>
+                    </form>
+                </div>
             <?php else : ?>
             <div class="post-comments modal-body col-5">
                     <div class="comments-wrapper">
@@ -158,9 +191,7 @@ $comments_num = count($comments);
                                     continue;
                                 }
                                 else {
-
-
-                                    ?>
+                                ?>
                                     <div class="comment">
                                         <div class="comment__avatar">
                                             <img src="<?=$user_info['avatar'] ?>" alt="">
@@ -172,17 +203,17 @@ $comments_num = count($comments);
                                         </div>
                                     </div>
                                     <hr>
-                                    <?php
+                                <?php
                                 }
-                            endforeach;
-                            ?>
+                                endforeach;
+                                ?>
                         </div>
 
                         <form class="comments-form" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
                             <?=$_GET['comment'] == 'login_fail' ? "Вы не авторизованы <br>" : '' ?>
                             <?=$_GET['comment'] == 'text_fail' ? "Слишком короткий комментарий (минимум 2 символа) <br>" : '' ?>
                             <?=$_GET['comment'] == 'happy' ? "Спасибо за комментарий <br>" : '' ?>
-                            <input type="text" name="text">
+                            <input type="text" name="text"  placeholder="Ваш комментарий" class="">
                             <button type="submit">Отправить</button>
                         </form>
                     </div>
