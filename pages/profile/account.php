@@ -16,7 +16,7 @@ if($user_id) :
 ?>
 <div class="container">
     <p>Ваше имя и фамилия: <?=$user['name_surname'] ?> <a href="change_name-surname.php">изменить имя и фамилию</a>  </p>
-    <p>Ваш ник: <?=$user['username'] ?> <a href="change_password.php">изменить ник</a>  </p>
+    <p>Ваше имя пользователя: <?=$user['username'] ?> <a href="change_username.php">изменить имя пользователя</a>  </p>
     <p>
     <?PHP
     if($user['phone'] == 'Телефон не указан') echo "${user['phone']}";

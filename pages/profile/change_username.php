@@ -21,12 +21,12 @@ $user_id = $_COOKIE['user'];
 if($user_id) :
     ?>
     <div class="container mt-5">
-        <form action="/php/action/changes/change_name_surname-handler.php" class="form" method="post">
+        <form action="/php/action/changes/change_username-handler.php" class="form" method="post">
             <div class="form-group">
-                <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили имя и фамилию</div>' : ''?>
-                <?=$_GET['change'] == 'name_surname-fail' ? '<div class="alert alert-danger">Поле заполнено неверно</div>' : ''?>
+                <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили Имя пользователя</div>' : ''?>
+                <?=$_GET['change'] == 'fail' ? '<div class="alert alert-danger">Имя пользователяя введёно неверно</div>' : ''?>
                 <?=$_GET['change'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
-                <input type="text" name="new_name_surname" class="form-control mb-3" placeholder="Новые имя и фамилия" required>
+                <input type="text" name="new_username" class="form-control mb-3" placeholder="Новое имя пользователя" required>
                 <button class="btn btn-md btn-success">Отправить</button>
             </div>
         </form>

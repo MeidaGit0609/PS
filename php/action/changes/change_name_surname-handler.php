@@ -2,7 +2,7 @@
 require_once '../../functions/user_functions.php';
 require_once '../../config.php';
 
-$header = "Location: ../../../pages/profile/change_name-surname.php" . ' ?change_n_srn=';
+$header = "Location: ../../../pages/profile/change_name-surname.php" . ' ?change=';
 
 if(count($_POST) > 0) {
     $new_name_surn = htmlspecialchars(trim($_POST['new_name_surname']));

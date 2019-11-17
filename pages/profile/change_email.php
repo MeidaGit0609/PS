@@ -23,9 +23,9 @@ if($user_id) :
     <div class="container mt-5">
         <form action="/php/action/changes/change_email-handler.php" class="form" method="post">
             <div class="form-group">
-                <?=$_GET['change_email'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили email</div>' : ''?>
-                <?=$_GET['change_email'] == 'email-fail' ? '<div class="alert alert-danger">Email Введён неверно</div>' : ''?>
-                <?=$_GET['change_email'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
+                <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили email</div>' : ''?>
+                <?=$_GET['change'] == 'email-fail' ? '<div class="alert alert-danger">Email Введён неверно</div>' : ''?>
+                <?=$_GET['change'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
                 <input type="text" name="new_email" class="form-control mb-3" placeholder="Новый email" required>
                 <button class="btn btn-md btn-success">Отправить</button>
             </div>
