@@ -24,7 +24,7 @@ if($user_id) :
     ?>
     <a href="change_password.php">изменить номер телефона</a>
     </p>
-    <p>Ваш электронный адрес: <?=$user['email'] ?> <a href="change_password.php">изменить email</a></p>
+    <p>Ваш электронный адрес: <?=$user['email'] ?> <a href="change_email.php">изменить email</a></p>
     <a href="change_password.php">изменить пароль</a>
     <br>
     <button class="btn btn-md btn-primary mt-4" data-toggle="modal" data-target="#exampleModal">Выйти из аккаунта</button>

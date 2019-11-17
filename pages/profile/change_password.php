@@ -1,10 +1,10 @@
 <?php
-require_once '../../../php/config.php';
-require_once '../../../php/functions/posts_functions.php';
-require_once '../../../php/functions/user_functions.php';
-require_once '../../../php/functions/comment_functions.php';
-require_once '../../../php/functions/like_functions.php';
-require_once '../../../includes/head.php';
+require_once '../../php/config.php';
+require_once '../../php/functions/posts_functions.php';
+require_once '../../php/functions/user_functions.php';
+require_once '../../php/functions/comment_functions.php';
+require_once '../../php/functions/like_functions.php';
+require_once '../../includes/head.php';
 ?>
     <style>
         .form {
@@ -15,7 +15,7 @@ require_once '../../../includes/head.php';
 </head>
 <body>
 <?php
-require_once '../../../includes/header.php';
+require_once '../../includes/header.php';
 
 $user_id = $_COOKIE['user'];
 if($user_id) :
@@ -40,4 +40,4 @@ if($user_id) :
 
 
     <script src="https://kit.fontawesome.com/e044194a8c.js" crossorigin="anonymous"></script>
-<? require_once '../../../includes/footer.php'; ?>
+<? require_once '../../includes/footer.php'; ?>
