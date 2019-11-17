@@ -30,8 +30,14 @@ $likes = $post['likes'];
         </div>
         <div class="post-stat stat-one">
 
-            <span class="post-stat__item"><i class="fas fa-eye"></i> <?=$post['views'] ?> </span>
-            <span class="post-stat__item"><i class="fas fa-comments"></i> <?=$comments_num ?></span>
+            <span class="post-stat__item">
+                <img src="/resource/img/icons/eye.svg" width="30">
+                <?=$post['views'] ?>
+            </span>
+            <span class="post-stat__item">
+                <img src="/resource/img/icons/comment.svg" width="30">
+                <?=$comments_num ?>
+            </span>
 
             <div class="like post-stat__item">
                 <form action="/php/action/like.php" method="post">
@@ -68,15 +74,21 @@ $likes = $post['likes'];
     <!--        Статистика для мобильной версии-->
         <div class="post-stat stat-mobile">
 
-            <span class="post-stat__item"><i class="fas fa-eye"></i> <?=$post['views'] ?> </span>
-            <span class="post-stat__item"><i class="fas fa-comments"></i> <?=$comments_num ?></span>
+            <span class="post-stat__item">
+                <img src="/resource/img/icons/eye.svg" width="30">
+                <?=$post['views'] ?>
+            </span>
+            <span class="post-stat__item">
+                <img src="/resource/img/icons/comment.svg" width="30">
+                <?=$comments_num ?>
+            </span>
 
             <div class="like post-stat__item">
                 <form action="/php/action/like.php" method="post">
                     <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
                     <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
                     <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                    <button type="submit" class="no-btn ">
+                    <button type="submit" class="no-btn">
                         <?php if(is_like($post['id'], $user_id)) :?>
                             <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
                         <?php else :?>

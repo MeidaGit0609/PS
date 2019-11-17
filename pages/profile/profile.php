@@ -60,6 +60,7 @@ require_once '../../includes/head.php';
             color: #ed4956;
         }
     </style>
+    <link rel="stylesheet" href="/resource/styles/index-page.css">
 </head>
 <body>
 <?php
@@ -123,22 +124,32 @@ if($user_id) :
                     $comments = get_post_comment($post['id']);
                     $comments_num = count($comments);
                     ?>
-                    <div class="col-md-4 col-sm-6 col-12 post mb-4">
+                    <div class="col-md-4 col-sm-6 col-12 mini-post post mb-4">
                         <a class="post_img w-100" href="/pages/post.php?id=<?=$post['id'] ?>">
-                            <img class="w-100" src="<?=$post['image'] ?>" alt="">
-                        </a>
-                        <div class="stat mt-1">
-                            <span class="views stat_item"><i class="fas fa-eye"></i> <?=$post['views'] ?></span>
-                            <span class="views stat_item"><i class="fas fa-comments"></i> <?=$comments_num ?></span>
-                            <form action="/php/action/like.php" method="post" class="like">
-                                <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
-                                <input type="hidden" name="post_id" value="<?=$post['id'] ?>">
-                                <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                                <button type="submit" class="no-btn stat_item <?=is_like($post['id'] , $user_id)  ? 'active' : '' ?>"><i class="fas fa-heart"></i> </button>
-                                <?=like_num($post['id'] ) ?>
-                            </form>
+                            <img class="w-100 d-block" src="<?=$post['image'] ?>" alt="">
 
-                        </div>
+                            <div class="stat w-100 h-100 post_sub">
+                        <span class="views stat_item">
+                            <img src="/resource/img/icons/comment.svg" height="50" class="comment_icon">
+                            <?=$comments_num ?>
+                        </span>
+                                <!-- like  -->
+                                <form action="/php/action/like.php" method="post" class="like stat_item">
+                                    <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
+                                    <input type="hidden" name="post_id" value="<?=$post['id'] ?>">
+                                    <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                                    <button type="submit" class="no-btn">
+                                        <?php if(is_like($post['id'], $user_id)) :?>
+                                            <img src="/resource/img/icons/like.svg" alt="" WIDTH="45">
+                                        <?php else :?>
+                                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
+                                        <?php endif; ?>
+                                    </button>
+                                    <?=like_num($post['id'] ) ?>
+                                </form>
+                            </div>
+
+                        </a>
                     </div>
                 <?php endforeach; ?>
             </div>
