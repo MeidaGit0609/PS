@@ -1,20 +1,7 @@
-<?php
-require_once '../includes/head.php';
-?>
-    <style>
-        .form .container {
-            max-width: 400px;
-            margin: 30px auto 0;
-        }
-        .card {
-            width: 100%;
-        }
-    </style>
+<?php require_once '../includes/head.php';  ?>
 </head>
 <body>
-<?php
-require_once '../includes/header.php';
-?>
+<?php require_once '../includes/header.php';  ?>
 <div class="form">
     <div class="container">
         <div class="row">
