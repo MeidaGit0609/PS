@@ -38,7 +38,13 @@ $likes = $post['likes'];
                     <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
                     <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
                     <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                    <button type="submit" class="no-btn <?=is_like($post['id'] , $user_id)  ? 'active' : '' ?>"><i class="fas fa-heart"></i></button>
+                    <button type="submit" class="no-btn">
+                        <?php if(is_like($post['id'], $user_id)) :?>
+                            <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
+                        <?php else :?>
+                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
+                        <?php endif; ?>
+                    </button>
                     <?=like_num($post['id'] ) ?>
                 </form>
 
@@ -70,7 +76,13 @@ $likes = $post['likes'];
                     <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
                     <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
                     <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                    <button type="submit" class="no-btn <?=is_like($post['id'] , $user_id)  ? 'active' : '' ?>"><i class="fas fa-heart"></i></button>
+                    <button type="submit" class="no-btn ">
+                        <?php if(is_like($post['id'], $user_id)) :?>
+                            <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
+                        <?php else :?>
+                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
+                        <?php endif; ?>
+                    </button>
                     <?=like_num($post['id'] ) ?>
                 </form>
 

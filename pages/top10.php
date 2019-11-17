@@ -4,7 +4,7 @@
 <?php require_once '../php/functions/like_functions.php'; ?>
 <?php require_once '../php/functions/user_functions.php'; ?>
 <?php require_once '../includes/head.php'; ?>
-
+    <link rel="stylesheet" href="/resource/styles/index-page.css">
 </head>
 <body>
 <?php require '../includes/header.php'; ?>

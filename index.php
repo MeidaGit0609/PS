@@ -4,10 +4,14 @@
 <?php require_once 'php/functions/comment_functions.php'; ?>
 <?php require_once 'php/functions/like_functions.php'; ?>
 <?php require_once 'includes/head.php'; ?>
+    <link rel="stylesheet" href="/resource/styles/index-page.css">
 </head>
 <body>
 <?php require 'includes/header.php'; ?>
-<div class="container mt-5">
+
+
+
+<div class="container mt-5" style="margin-top: 300px;">
     <div class="row">
         <?php
         if(isset($_GET['page'])) {
