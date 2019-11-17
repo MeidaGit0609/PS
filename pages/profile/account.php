@@ -22,7 +22,7 @@ if($user_id) :
     if($user['phone'] == 'Телефон не указан') echo "${user['phone']}";
     else echo "Ваш номер телефона: ${user['phone']} ";
     ?>
-    <a href="change_password.php">изменить номер телефона</a>
+    <a href="change_phone.php">изменить номер телефона</a>
     </p>
     <p>Ваш электронный адрес: <?=$user['email'] ?> <a href="change_email.php">изменить email</a></p>
     <a href="change_password.php">изменить пароль</a>
