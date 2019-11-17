@@ -1,8 +1,8 @@
 <?php
-require_once '../config.php';
-require_once '../functions/user_functions.php';
+require_once '../../config.php';
+require_once '../../functions/user_functions.php';
 
-$header = 'Location: ../../pages/profile/change_password.php?change=';
+$header = 'Location: ../../../pages/profile/change_password.php?change=';
 
 if(count($_POST) > 0) {
     $old_pass = md5(htmlspecialchars($_POST['old_pass']));
@@ -19,7 +19,7 @@ if(count($_POST) > 0) {
         $header .= 'pass_repeating';
     }
     else {
-        change_password($new_pass, $user['id']);
+        change($new_pass, 'password', $user['id']);
         $header .= 'happy';
     }
 }

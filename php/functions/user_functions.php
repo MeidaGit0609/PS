@@ -63,11 +63,12 @@ function add_avatar($user_id, $way) {
     mysqli_query($connection, $sql);
 }
 
-// Меняет пароль
-function change_password($new_password, $user_id) {
+
+// Меняет что-либо
+function change($new_info, $who, $user_id) {
     global $connection;
 
-    $sql = "UPDATE `users` SET `password` = '$new_password' WHERE `id` = '$user_id';";
+    $sql = "UPDATE `users` SET `$who` = '$new_info' WHERE `id` = '$user_id';";
     mysqli_query($connection, $sql);
 }
 

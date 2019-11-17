@@ -168,7 +168,7 @@ if($user_id) :
                     <?php if($page == $forLimit || $page > $forLimit) :?>
 
                     <?php else : ?>
-                        <a href="?page=<?=$page + 1;?>" class="pageBtn ml-3">Следующая страница <?=$forLimit ?></a>
+                        <a href="?page=<?=$page + 1;?>" class="pageBtn ml-3">Следующая страница</a>
                     <?php endif; ?>
 
 

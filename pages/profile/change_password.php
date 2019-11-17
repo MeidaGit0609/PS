@@ -21,7 +21,7 @@ $user_id = $_COOKIE['user'];
 if($user_id) :
     ?>
     <div class="container mt-5">
-        <form action="/php/action/change_password-handler.php" class="form" method="post">
+        <form action="/php/action/changes/change_password-handler.php" class="form" method="post">
             <div class="form-group">
                 <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно поменяли пароль</div>' : ''?>
                 <?=$_GET['change'] == 'pass_repeating' ? '<div class="alert alert-danger">Старый и новый пароли одинаковые</div>' : ''?>

@@ -1,5 +1,5 @@
 <?php
-require '../functions/user_functions.php';
+require_once '../functions/user_functions.php';
 
 $header = 'Location: ../../pages/registration.php?regist=';
 
@@ -56,7 +56,5 @@ if(count($_POST) > 0) {
 else {
     $header .= 'not';
 }
-
-//print_r($user_id_array);
 
 header($header);
