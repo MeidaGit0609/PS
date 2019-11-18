@@ -6,60 +6,8 @@ require_once '../../php/functions/comment_functions.php';
 require_once '../../php/functions/like_functions.php';
 require_once '../../includes/head.php';
 ?>
-    <style>
-        b {
-            font-weight: 600;
-        }
-
-        .stat_item {
-            margin-left: 10px;
-        }
-        .stat_item:first-child {
-            margin-left: 0;
-        }
-
-        .user__username {
-            color: rgba(38, 38, 38, 0.38);
-            font-weight: 300;
-        }
-        .avatar {
-            width: 200px;
-            max-width: 100%;
-            height: auto;
-        }
-        .avatar img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-        }
-
-        .user__username {
-            color: rgba(38,38,38,0.3);
-        }
-
-        .user__public-count {
-            color: #262626;
-        }
-
-        .like {
-            display: inline-block;
-        }
-
-        .like button {
-            padding: 0;
-
-            background: none;
-            border: none;
-
-            color: #d2d2d2;
-            font-size: 20px;
-        }
-
-        .like .active {
-            color: #ed4956;
-        }
-    </style>
+    <link rel="stylesheet" href="/resource/styles/index-page.css">
+    <link rel="stylesheet" href="/resource/styles/profile.css">
 </head>
 <body>
 <?php
@@ -68,31 +16,31 @@ require_once '../../includes/header.php';
 $user_id = $_COOKIE['user'];
 if($user_id) :
 ?>
-<header class="profile-header mt-5">
+<header class="profile-header">
     <div class="container">
-        <div class="row mb-5">
+        <div class="row flex-wrap-wrap">
             <? $user_info = user_by_id($user_id); ?>
-            <div class="col-2 mr-2">
+            <div class="col-md-3 col-sm-4 col-lg-2 col-3 avatar-wrapper">
                 <div class="avatar">
                     <img src="<?=$user_info['avatar'] ?>" alt="">
                 </div>
             </div>
             <div class="col">
                 <h1 class="user__username"><?=$user_info['username'] ?></h1>
-                <div class="user__public-count mt-4 mb-4">
+                <div class="user__public-count">
                     <?php $posts_counter = user_posts_counter($user_id); ?>
                     <b><?=$posts_counter ?></b> Публикация
                 </div>
                 <div class="user__name"><b><?=$user_info['name_surname'] ?></b></div>
 
-                <form action="/php/action/add_avatar.php?user_id=<?=$user_id ?>" method="post" enctype="multipart/form-data" class="mt-2">
-                    Загрузить аватар <br>
-                    <?=$_GET['upload'] == 'expansion_false' ? 'Невозможно загружпть файлы такого типа в целях безопасности<br>' : '' ?>
+                <form action="/php/action/add_avatar.php?user_id=<?=$user_id ?>" method="post" enctype="multipart/form-data" class="avatar_upload">
+                    <b>Поменять аватар:</b>
+                    <?=$_GET['upload'] == 'expansion_false' ? 'Невозможно загружать файлы такого типа в целях безопасности<br>' : '' ?>
                     <?=$_GET['upload'] == 'mime_false' ? 'Невозможно загружпть файлы такого типа в целях безопасности<br>' : '' ?>
                     <?=$_GET['upload'] == 'happy' ? 'Аватар успешно сменён<br>' : '' ?>
                     <?=$_GET['upload'] == 'big' ? 'Фото весит слишком много<br>' : '' ?>
                     <input type="file" name="avatar">
-                    <button type="submit" name="enter">Загрузить</button>
+                    <button type="submit" class="btn btn-sm btn-primary" name="enter">Загрузить</button>
                 </form>
             </div>
         </div>
@@ -123,22 +71,32 @@ if($user_id) :
                     $comments = get_post_comment($post['id']);
                     $comments_num = count($comments);
                     ?>
-                    <div class="col-md-4 col-sm-6 col-12 post mb-4">
+                    <div class="col-md-4 col-sm-6 col-12 mini-post post mb-4">
                         <a class="post_img w-100" href="/pages/post.php?id=<?=$post['id'] ?>">
-                            <img class="w-100" src="<?=$post['image'] ?>" alt="">
-                        </a>
-                        <div class="stat mt-1">
-                            <span class="views stat_item"><i class="fas fa-eye"></i> <?=$post['views'] ?></span>
-                            <span class="views stat_item"><i class="fas fa-comments"></i> <?=$comments_num ?></span>
-                            <form action="/php/action/like.php" method="post" class="like">
-                                <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
-                                <input type="hidden" name="post_id" value="<?=$post['id'] ?>">
-                                <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                                <button type="submit" class="no-btn stat_item <?=is_like($post['id'] , $user_id)  ? 'active' : '' ?>"><i class="fas fa-heart"></i> </button>
-                                <?=like_num($post['id'] ) ?>
-                            </form>
+                            <img class="w-100 d-block" src="<?=$post['image'] ?>" alt="">
 
-                        </div>
+                            <div class="stat w-100 h-100 post_sub">
+                        <span class="views stat_item">
+                            <img src="/resource/img/icons/comment.svg" height="50" class="comment_icon">
+                            <?=$comments_num ?>
+                        </span>
+                                <!-- like  -->
+                                <form action="/php/action/like.php" method="post" class="like stat_item">
+                                    <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
+                                    <input type="hidden" name="post_id" value="<?=$post['id'] ?>">
+                                    <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                                    <button type="submit" class="no-btn">
+                                        <?php if(is_like($post['id'], $user_id)) :?>
+                                            <img src="/resource/img/icons/like.svg" alt="" WIDTH="45">
+                                        <?php else :?>
+                                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
+                                        <?php endif; ?>
+                                    </button>
+                                    <?=like_num($post['id'] ) ?>
+                                </form>
+                            </div>
+
+                        </a>
                     </div>
                 <?php endforeach; ?>
             </div>

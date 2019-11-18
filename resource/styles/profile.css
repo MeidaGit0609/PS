@@ -1,0 +1,45 @@
+b {
+    font-weight: 600;
+}
+
+.user__username {
+    color: rgba(38, 38, 38, 0.3);
+    font-weight: 300;
+}
+.avatar {
+    width: 200px;
+    max-width: 100%;
+    height: auto;
+}
+.avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.avatar_upload {
+    margin-top: 50px;
+    padding: 10px;
+
+    border: 2px solid #007bff;
+}
+
+.user__public-count {
+    margin: 15px 0;
+
+    color: #262626;
+}
+
+.user__name {
+    margin-bottom: 10px;
+}
+
+
+@media (max-width: 500px) {
+    .avatar-wrapper {
+        max-width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}

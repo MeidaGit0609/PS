@@ -1,15 +1,6 @@
 <?php
 require '../includes/head.php';
 ?>
-    <style>
-        .form .container {
-            max-width: 400px;
-            margin: 30px auto 0;
-        }
-        .card {
-            width: 100%;
-        }
-    </style>
 </head>
 <body>
 <?php

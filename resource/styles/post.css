@@ -1,0 +1,291 @@
+/* ==================
+Страница поста
+======================*/
+
+.no-btn {
+    background: none;
+    border: 0;
+}
+
+.post {
+    max-width: 900px;
+    width: 90%;
+    height: 600px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+
+    position: relative;
+
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.post__content {
+    width: 60%;
+}
+
+.post__right {
+    width: 40%;
+}
+
+@media (max-width: 800px) {
+    .post__right {
+        width: 50%;
+    }
+    .post__content {
+        width: 50%;
+    }
+}
+
+
+/* Левая часть поста*/
+.post__img {
+    height: calc(100% - 50px);
+    width: 100%;
+    padding: 3px;
+
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post__img img {
+    width: 100%;
+    /*max-height: 100%;*/
+    display: block;
+}
+
+.post-stat {
+    height: 50px;
+    margin: 15px 0 15px 15px;
+
+    display: flex;
+}
+
+.stat-mobile {
+    display: none;
+}
+
+.post-stat__item {
+    margin-right: 15px;
+
+    font-size: 20px;
+}
+
+.post-stat__item img {
+    margin-right: 10px;
+}
+
+.like {
+    display: inline-block;
+    /*transform: translateY(0);*/
+}
+
+.like button {
+    padding: 0;
+
+    background: none;
+    border: none;
+}
+
+.like i {
+    color: #d2d2d2;
+}
+
+.like .active i {
+    color: #ed4956 !important;
+}
+
+.post__description {
+    margin-left: 15px;
+}
+
+/* Правая часть поста*/
+.post__right {
+    min-height: 100px;
+    max-height: 100%;
+
+    position: relative;
+
+    border-left: 1px solid #EFEFEF;
+}
+
+/*Автор*/
+.author {
+    padding: 15px;
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+
+    border-bottom: 1px solid #EFEFEF;
+}
+
+.author__avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.author__avatar img {
+    display: block;
+    max-width: 100%;
+
+    border-radius: 50%;
+}
+/*
+Описание
+*/
+
+
+.comments {
+    height: calc(100% - 125px);
+    padding: 15px;
+    overflow: auto;
+}
+
+.comments__item {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.comments__avatar {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+}
+
+.comments__avatar img {
+    max-width: 100%;
+    padding: 2px;
+
+    display: block;
+
+    border-radius: 50%;
+    border: 1px solid #AAAAAA;
+}
+
+.comments__name {
+    /*margin-bottom: 0;*/
+
+    /*font-size: 20px;*/
+}
+
+.comments__text {
+    margin: 0;
+    margin-top: 2px;
+    font-size: 13px;
+}
+
+/*
+Форма сообщения
+*/
+
+
+.comments-form {
+    width: 100%;
+    height: 50px;
+
+    display: flex;
+    justify-content: flex-end;
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    background: #fff;
+}
+
+.comments-form_mobile {
+    display: none;
+
+    width: 100%;
+    height: 50px;
+
+    display: flex;
+    justify-content: flex-end;
+
+    background: #fff;
+    border-top: 1px solid #EFEFEF;
+}
+
+/*.comments-form {*/
+/*    max-height: 100%;*/
+/*}*/
+
+.comments-form__input {
+    width: 80%;
+    padding: 10px;
+    display: block;
+
+    border: 0;
+}
+
+.comments-form__input:focus,
+.comments-form__input:active {
+    outline: none;
+}
+
+.comments__btn {
+    height: 100%;
+    padding: 0 30px;
+
+    border: 0;
+    background: none;
+
+    color: #007bff;
+}
+
+@media (max-width: 770px) {
+    .post {
+        margin-bottom: 500px;
+        height: 100%;
+        flex-direction: column;
+    }
+
+    .post__content {
+        width: auto;
+    }
+
+    .post-stat {
+        margin-bottom: 0;
+    }
+
+    .stat-one {
+        display: none;
+    }
+
+    .stat-mobile {
+        display: flex;
+    }
+
+    .post__right {
+        width: auto;
+        height: auto;
+    }
+
+    .comments {
+        /*margin-top: 50px;*/
+
+        overflow: visible;
+    }
+
+    .comments-form {
+        display: none;
+    }
+
+    .comments-form_mobile {
+        display: flex;
+
+        border-bottom: 1px solid #EFEFEF;
+    }
+}

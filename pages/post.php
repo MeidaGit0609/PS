@@ -4,195 +4,295 @@
 <?php require_once '../php/functions/like_functions.php'; ?>
 <?php require_once '../php/functions/user_functions.php'; ?>
 <?php require_once '../includes/head.php'; ?>
-    <style>
-        .like {
-            transform: translateY(-4px);
-        }
-
-        .like button {
-            padding: 0;
-
-            background: none;
-            border: none;
-
-            color: #d2d2d2;
-            font-size: 20px;
-        }
-
-        .like .active {
-            color: #ed4956;
-        }
-
-        .stat_item {
-            margin-left: 20px;
-        }
-        .stat_item:first-child {
-            margin-left: 0;
-        }
-
-        .modal-dialog {
-            max-width: 100% !important;
-        }
-
-        .post-modal {
-            min-width: 60vw;
-            max-width: 95vw;
-        }
-
-        .post-modal-mini {
-            max-width: 600px;
-        }
-
-        .modal__img img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .comments {
-            /*max-height: 100%;*/
-        }
-
-        .post-comments {
-            min-height: 100px;
-            max-height: 600px;
-            position: relative;
-        }
-
-        .comments-wrapper {
-            overflow: auto;
-            max-height: calc(100% - 30px);
-        }
-
-        .comments-form {
-            height: 30px;
-
-            position: absolute;
-            bottom: 16px;
-            left: 15px;
-        }
-
-        .comment {
-            padding-left: 65px;
-
-            position: relative;
-        }
-
-        .comment__avatar {
-            width: 50px;
-            height: 50px;
-
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .comment__avatar img {
-            width: 100%;
-            height: auto;
-            display: block;
-
-            border-radius: 50%;
-        }
-
-        .comment__name {
-            margin: 0;
-            font-weight: 600;
-            font-size: 17px;
-            color: #000000a3;
-        }
-    </style>
+    <link rel="stylesheet" href="/resource/styles/post.css">
 </head>
 <body>
-<?php require '../includes/header.php'; ?>
-
 <?php
+require '../includes/header.php';
+
 $user_id = isset($_COOKIE['user']) ? $_COOKIE['user'] : null;
 $post_id  = $_GET['id'];
 $post = get_post_by_id($post_id); // Массив с информацией о посте
 $comments = get_post_comment($post_id); // Массив со всеми комментариями
+$author = get_user_id_by_id($post['user_id']);
 
-$likes = $post['likes'];
 
 // Добавляем просмотр
 $views = add_views($post['views'], $post_id);
 $comments_num = count($comments);
+$likes = $post['likes'];
 ?>
 
-<div class="">
-    <div class="modal-dialog row justify-content-center" role="document">
-        <div class="modal-content <?=$comments_num > 4 ? 'post-modal row flex-row' : 'post-modal-mini ' ?>">
-            <div class="modal-body <?=$comments_num > 4 ? 'col-6' : '' ?> modal__img">
-                <div class="photo">
-                    <img src="<?=$post['image'] ?>" alt="" class="block">
+<div class="post">
+    <div class="post__content">
+        <div class="post__img">
+            <img src="<?=$post['image'] ?>" alt="">
+        </div>
+        <div class="post-stat stat-one">
+
+            <span class="post-stat__item">
+                <img src="/resource/img/icons/eye.svg" width="30">
+                <?=$post['views'] ?>
+            </span>
+            <span class="post-stat__item">
+                <img src="/resource/img/icons/comment.svg" width="30">
+                <?=$comments_num ?>
+            </span>
+
+
+            <?php if(isset($_COOKIE['user'])) : ?>
+                <div class="like post-stat__item">
+                    <form action="/php/action/like.php" method="post">
+                        <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
+                        <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
+                        <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                        <button type="submit" class="no-btn">
+                            <?php if(is_like($post['id'], $user_id)) :?>
+                                <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
+                            <?php else :?>
+                                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
+                            <?php endif; ?>
+                        </button>
+                        <?=like_num($post['id'] ) ?>
+                    </form>
+
                 </div>
-                <div class="stat row mt-3 ml-2">
-                    <span class="views stat_item"><i class="fas fa-eye"></i> <?=$post['views'] ?> </span>
-                    <span class="views stat_item"><i class="fas fa-comments"></i> <?=$comments_num ?></span>
+            <?php else: ?>
+                <button class="like post-stat__item no-btn" data-toggle="modal" data-target="#account_fail">
+                    <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30"><?=like_num($post['id'] ) ?>
+                </button>
 
-                    <div class="like stat_item">
-                        <form action="/php/action/like.php" method="post">
-                            <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
-                            <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
-                            <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                            <button type="submit" class="no-btn <?=is_like($post['id'] , $user_id)  ? 'active' : '' ?>"><i class="fas fa-heart"></i></button>
-                            <?=like_num($post['id'] ) ?>
-                        </form>
-
-                    </div>
-                </div>
-                <p class="post-description">
-                    <?=$post['description'] ?>
-                </p>
-            </div>
-            <?php if($comments_num < 4) : ?>
-            <?php else : ?>
-            <div class="post-comments modal-body col-5">
-                    <div class="comments-wrapper">
-                        <div class="comments">
-                            <?php
-                            // $comments это Массив со всеми комментариями
-                            foreach($comments as $comment) :
-                                $user_info = user_by_id($comment['user_id']);
-                                if($user_info == null) {
-                                    continue;
-                                }
-                                else {
-
-
-                                    ?>
-                                    <div class="comment">
-                                        <div class="comment__avatar">
-                                            <img src="<?=$user_info['avatar'] ?>" alt="">
-                                        </div>
-                                        <div class="comment__body">
-                                            <h3 class="comment__name"><?=$user_info['username'] ?>
-                                            </h3>
-                                            <p class="comment__text"><?=$comment['text'] ?></p>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <?php
-                                }
-                            endforeach;
-                            ?>
+                <!-- Modal -->
+                <div class="modal fade" id="account_fail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="exampleModalLabel">Вы не зарегистрированы</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Ок</button>
+                            </div>
                         </div>
-
-                        <form class="comments-form" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
-                            <?=$_GET['comment'] == 'login_fail' ? "Вы не авторизованы <br>" : '' ?>
-                            <?=$_GET['comment'] == 'text_fail' ? "Слишком короткий комментарий (минимум 2 символа) <br>" : '' ?>
-                            <?=$_GET['comment'] == 'happy' ? "Спасибо за комментарий <br>" : '' ?>
-                            <input type="text" name="text">
-                            <button type="submit">Отправить</button>
-                        </form>
                     </div>
+                </div>
+            <?php endif; ?>
+
+        </div>
+
+    </div>
+    <div class="post__right">
+
+        <div class="author">
+            <div class="author__avatar">
+                <img src="<?=$author['avatar'] ?>" alt="">
+            </div>
+            <div class="author__username">
+                <b><?=$author['username'] ?> &middot;</b>
+                <a href="">Подписаться</a>
+            </div>
+        </div>
+
+    <!--        Статистика для мобильной версии-->
+        <div class="post-stat stat-mobile">
+
+            <span class="post-stat__item">
+                <img src="/resource/img/icons/eye.svg" width="30">
+                <?=$post['views'] ?>
+            </span>
+            <span class="post-stat__item">
+                <img src="/resource/img/icons/comment.svg" width="30">
+                <?=$comments_num ?>
+            </span>
+
+            <?php if(isset($_COOKIE['user'])) : ?>
+                <div class="like post-stat__item">
+                    <form action="/php/action/like.php" method="post">
+                        <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
+                        <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
+                        <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                        <button type="submit" class="no-btn">
+                            <?php if(is_like($post['id'], $user_id)) :?>
+                                <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
+                            <?php else :?>
+                                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
+                            <?php endif; ?>
+                        </button>
+                        <?=like_num($post['id'] ) ?>
+                    </form>
+
+                </div>
+            <?php else: ?>
+            <div class="like post-stat__item">
+                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
+                <?=like_num($post['id'] ) ?>
+            </div>
+            <?php endif; ?>
+
+
+        </div>
+
+<!--        Форма для мобильной версии-->
+        <?php if(isset($_COOKIE['user'])) :?>
+            <form class="comments-form_mobile" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
+                <input type="text" name="text"  placeholder="Ваш комментарий" class="comments-form__input">
+                <button type="submit" class="comments__btn d-inline">Отправить</button>
+            </form>
+        <?php else: ?>
+
+        <?php endif; ?>
+
+
+        <div class="comments">
+            <div class="comments__item">
+                <div class="comments__avatar">
+                    <img src="<?=$author['avatar'] ?>" alt="">
+                </div>
+                <div class="comments__right">
+                    <p class="comments__text">
+                        <b class="comments__name"><?=$author['username'] ?></b>
+                        <?=$post['description'] ?>
+                    </p>
+                </div>
             </div>
             <?php
-            endif;
+            foreach($comments as $comment) :
+                $user_info = user_by_id($comment['user_id']);
+                if($user_info == null) :
+                    continue;
+
+                else :
             ?>
+
+            <div class="comments__item">
+                <div class="comments__avatar">
+                    <img src="<?=$user_info['avatar'] ?>" alt="">
+                </div>
+                <div class="comments__right">
+                    <p class="comments__text">
+                        <b class="comments__name"><?=$user_info['username'] ?></b>
+                        <?=$comment['text'] ?></p>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php endforeach; ?>
+
         </div>
+
+        <?php if(isset($_COOKIE['user'])) :?>
+            <form class="comments-form_mobile" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
+                <input type="text" name="text"  placeholder="Ваш комментарий" class="comments-form__input">
+                <button type="submit" class="comments__btn d-inline">Отправить</button>
+            </form>
+        <?php else: ?>
+
+        <?php endif; ?>
     </div>
 </div>
+
+
+
+
+<!--<div class="container" style="margin-top: 200px;">-->
+<!--    <div class="--><?//=$comments_num > 4 ? 'post-modal row flex-row' : 'post-modal-mini ' ?><!--">-->
+<!--            <div class="--><?//=$comments_num > 4 ? 'col-6' : '' ?><!-- modal__img">-->
+<!--                <div class="photo">-->
+<!--                    <img src="--><?//=$post['image'] ?><!--" alt="" class="block">-->
+<!--                </div>-->
+<!--                <div class="stat row mt-3 ml-2">-->
+<!--                    <span class="views stat_item"><i class="fas fa-eye"></i> --><?//=$post['views'] ?><!-- </span>-->
+<!--                    <span class="views stat_item"><i class="fas fa-comments"></i> --><?//=$comments_num ?><!--</span>-->
+<!---->
+<!--                    <div class="like stat_item">-->
+<!--                        <form action="/php/action/like.php" method="post">-->
+<!--                            <input type="hidden" name="likes" value="--><?//=$post['likes'] ?><!--">-->
+<!--                            <input type="hidden" name="post_id" value="--><?//=$post['id']  ?><!--">-->
+<!--                            <input type="hidden" name="user_id" value="--><?//=$user_id ?><!--">-->
+<!--                            <button type="submit" class="no-btn --><?//=is_like($post['id'] , $user_id)  ? 'active' : '' ?><!--"><i class="fas fa-heart"></i></button>-->
+<!--                            --><?//=like_num($post['id'] ) ?>
+<!--                        </form>-->
+<!---->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <p class="post-description">-->
+<!--                    --><?//=$post['description'] ?>
+<!--                </p>-->
+<!--            </div>-->
+<!--            --><?php //if($comments_num < 4) : ?>
+<!--                <div class="comments">-->
+<!--                    --><?php
+//                    // $comments это Массив со всеми комментариями
+//                    foreach($comments as $comment) :
+//                        $user_info = user_by_id($comment['user_id']);
+//                        if($user_info == null) {
+//                            continue;
+//                        }
+//                        else {
+//                    ?>
+<!--                            <div class="comment">-->
+<!--                                <div class="comment__avatar">-->
+<!--                                    <img src="--><?//=$user_info['avatar'] ?><!--" alt="">-->
+<!--                                </div>-->
+<!--                                <div class="comment__body">-->
+<!--                                    <h3 class="comment__name">--><?//=$user_info['username'] ?>
+<!--                                    </h3>-->
+<!--                                    <p class="comment__text">--><?//=$comment['text'] ?><!--</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <hr>-->
+<!--                            --><?php
+//                        }
+//                    endforeach;
+//                    ?>
+<!--                    <form class="comments-form" action="/php/action/comment-handler.php?post_id=--><?//=$post['id'] ?><!--" method="post">-->
+<!--                        --><?//=$_GET['comment'] == 'login_fail' ? "Вы не авторизованы <br>" : '' ?>
+<!--                        --><?//=$_GET['comment'] == 'text_fail' ? "Слишком короткий комментарий (минимум 2 символа) <br>" : '' ?>
+<!--                        --><?//=$_GET['comment'] == 'happy' ? "Спасибо за комментарий <br>" : '' ?>
+<!--                        <input type="text" name="text"  placeholder="Ваш комментарий" class="form-control d-inline w-auto h-100">-->
+<!--                        <button type="submit" class="btn btn-md btn-primary d-inline mh-100">Отправить</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            --><?php //else : ?>
+<!--            <div class="post-comments col-5">-->
+<!--                        <div class="comments">-->
+<!--                            --><?php
+//                            // $comments это Массив со всеми комментариями
+//                            foreach($comments as $comment) :
+//                                $user_info = user_by_id($comment['user_id']);
+//                                if($user_info == null) {
+//                                    continue;
+//                                }
+//                                else {
+//                                ?>
+<!--                                    <div class="comment">-->
+<!--                                        <div class="comment__avatar">-->
+<!--                                            <img src="--><?//=$user_info['avatar'] ?><!--" alt="">-->
+<!--                                        </div>-->
+<!--                                        <div class="comment__body">-->
+<!--                                            <h3 class="comment__name">--><?//=$user_info['username'] ?>
+<!--                                            </h3>-->
+<!--                                            <p class="comment__text">--><?//=$comment['text'] ?><!--</p>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <hr>-->
+<!--                                --><?php
+//                                }
+//                                endforeach;
+//                                ?>
+<!--                        </div>-->
+<!---->
+<!--                        <form class="comments-form" action="/php/action/comment-handler.php?post_id=--><?//=$post['id'] ?><!--" method="post">-->
+<!--                            --><?//=$_GET['comment'] == 'login_fail' ? "Вы не авторизованы <br>" : '' ?>
+<!--                            --><?//=$_GET['comment'] == 'text_fail' ? "Слишком короткий комментарий (минимум 2 символа) <br>" : '' ?>
+<!--                            --><?//=$_GET['comment'] == 'happy' ? "Спасибо за комментарий <br>" : '' ?>
+<!--                            <input type="text" name="text"  placeholder="Ваш комментарий" class="form-control d-inline w-auto h-100">-->
+<!--                            <button type="submit" class="btn btn-md btn-primary d-inline mh-100">Отправить</button>-->
+<!--                        </form>-->
+<!--            </div>-->
+<!--            --><?php
+//            endif;
+//            ?>
+<!--    </div>-->
+<!--</div>-->
 
 <script src="https://kit.fontawesome.com/e044194a8c.js" crossorigin="anonymous"></script>
 <?php require '../includes/footer.php'; ?>
