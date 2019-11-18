@@ -2,6 +2,11 @@
 Страница поста
 ======================*/
 
+.no-btn {
+    background: none;
+    border: 0;
+}
+
 .post {
     max-width: 900px;
     width: 90%;
@@ -69,6 +74,10 @@
     margin-right: 15px;
 
     font-size: 20px;
+}
+
+.post-stat__item img {
+    margin-right: 10px;
 }
 
 .like {

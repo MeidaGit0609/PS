@@ -36,23 +36,31 @@
 
                     <div class="stat w-100 h-100 post_sub">
                         <span class="views stat_item">
-                            <img src="/resource/img/icons/comment.svg" width="50" class="comment_icon">
+                            <img src="/resource/img/icons/comment-white.svg" width="50" class="comment_icon">
                             <?=$comments_num ?>
                         </span>
                         <!-- like  -->
-                        <form action="/php/action/like.php" method="post" class="like stat_item">
-                            <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
-                            <input type="hidden" name="post_id" value="<?=$post['id'] ?>">
-                            <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                            <button type="submit" class="no-btn">
-                                <?php if(is_like($post['id'], $user_id)) :?>
-                                    <img src="/resource/img/icons/like.svg" alt="" WIDTH="45">
-                                <?php else :?>
-                                    <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
-                                <?php endif; ?>
-                            </button>
+                        <?php if(isset($_COOKIE['user'])) : ?>
+                            <form action="/php/action/like.php" method="post" class="like stat_item">
+                                <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
+                                <input type="hidden" name="post_id" value="<?=$post['id'] ?>">
+                                <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                                <button type="submit" class="no-btn">
+                                    <?php if(is_like($post['id'], $user_id)) :?>
+                                        <img src="/resource/img/icons/like.svg" alt="" WIDTH="45">
+                                    <?php else :?>
+                                        <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
+                                    <?php endif; ?>
+                                </button>
+                                <?=like_num($post['id'] ) ?>
+                            </form>
+                        <?php else: ?>
+                        <div class="like stat_item">
+                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
                             <?=like_num($post['id'] ) ?>
-                        </form>
+                        </div>
+                        <?php endif; ?>
+
                     </div>
 
                 </a>

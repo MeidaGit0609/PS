@@ -6,61 +6,8 @@ require_once '../../php/functions/comment_functions.php';
 require_once '../../php/functions/like_functions.php';
 require_once '../../includes/head.php';
 ?>
-    <style>
-        b {
-            font-weight: 600;
-        }
-
-        .stat_item {
-            margin-left: 10px;
-        }
-        .stat_item:first-child {
-            margin-left: 0;
-        }
-
-        .user__username {
-            color: rgba(38, 38, 38, 0.38);
-            font-weight: 300;
-        }
-        .avatar {
-            width: 200px;
-            max-width: 100%;
-            height: auto;
-        }
-        .avatar img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-        }
-
-        .user__username {
-            color: rgba(38,38,38,0.3);
-        }
-
-        .user__public-count {
-            color: #262626;
-        }
-
-        .like {
-            display: inline-block;
-        }
-
-        .like button {
-            padding: 0;
-
-            background: none;
-            border: none;
-
-            color: #d2d2d2;
-            font-size: 20px;
-        }
-
-        .like .active {
-            color: #ed4956;
-        }
-    </style>
     <link rel="stylesheet" href="/resource/styles/index-page.css">
+    <link rel="stylesheet" href="/resource/styles/profile.css">
 </head>
 <body>
 <?php
@@ -69,31 +16,31 @@ require_once '../../includes/header.php';
 $user_id = $_COOKIE['user'];
 if($user_id) :
 ?>
-<header class="profile-header mt-5">
+<header class="profile-header">
     <div class="container">
-        <div class="row mb-5">
+        <div class="row flex-wrap-wrap">
             <? $user_info = user_by_id($user_id); ?>
-            <div class="col-2 mr-2">
+            <div class="col-md-3 col-sm-4 col-lg-2 col-3 avatar-wrapper">
                 <div class="avatar">
                     <img src="<?=$user_info['avatar'] ?>" alt="">
                 </div>
             </div>
             <div class="col">
                 <h1 class="user__username"><?=$user_info['username'] ?></h1>
-                <div class="user__public-count mt-4 mb-4">
+                <div class="user__public-count">
                     <?php $posts_counter = user_posts_counter($user_id); ?>
                     <b><?=$posts_counter ?></b> Публикация
                 </div>
                 <div class="user__name"><b><?=$user_info['name_surname'] ?></b></div>
 
-                <form action="/php/action/add_avatar.php?user_id=<?=$user_id ?>" method="post" enctype="multipart/form-data" class="mt-2">
-                    Загрузить аватар <br>
-                    <?=$_GET['upload'] == 'expansion_false' ? 'Невозможно загружпть файлы такого типа в целях безопасности<br>' : '' ?>
+                <form action="/php/action/add_avatar.php?user_id=<?=$user_id ?>" method="post" enctype="multipart/form-data" class="avatar_upload">
+                    <b>Поменять аватар:</b>
+                    <?=$_GET['upload'] == 'expansion_false' ? 'Невозможно загружать файлы такого типа в целях безопасности<br>' : '' ?>
                     <?=$_GET['upload'] == 'mime_false' ? 'Невозможно загружпть файлы такого типа в целях безопасности<br>' : '' ?>
                     <?=$_GET['upload'] == 'happy' ? 'Аватар успешно сменён<br>' : '' ?>
                     <?=$_GET['upload'] == 'big' ? 'Фото весит слишком много<br>' : '' ?>
                     <input type="file" name="avatar">
-                    <button type="submit" name="enter">Загрузить</button>
+                    <button type="submit" class="btn btn-sm btn-primary" name="enter">Загрузить</button>
                 </form>
             </div>
         </div>

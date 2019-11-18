@@ -9,7 +9,7 @@
             if(isset($_COOKIE['user'])) :
             ?>
             <li class="nav-item active">
-                <a class="nav-link" href="/pages/profile/profile.php">Профиль <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/pages/profile/profile.php">Профиль</a>
             </li>
             <?php
             endif;

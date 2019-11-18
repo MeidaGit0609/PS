@@ -39,22 +39,43 @@ $likes = $post['likes'];
                 <?=$comments_num ?>
             </span>
 
-            <div class="like post-stat__item">
-                <form action="/php/action/like.php" method="post">
-                    <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
-                    <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
-                    <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                    <button type="submit" class="no-btn">
-                        <?php if(is_like($post['id'], $user_id)) :?>
-                            <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
-                        <?php else :?>
-                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
-                        <?php endif; ?>
-                    </button>
-                    <?=like_num($post['id'] ) ?>
-                </form>
 
-            </div>
+            <?php if(isset($_COOKIE['user'])) : ?>
+                <div class="like post-stat__item">
+                    <form action="/php/action/like.php" method="post">
+                        <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
+                        <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
+                        <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                        <button type="submit" class="no-btn">
+                            <?php if(is_like($post['id'], $user_id)) :?>
+                                <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
+                            <?php else :?>
+                                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
+                            <?php endif; ?>
+                        </button>
+                        <?=like_num($post['id'] ) ?>
+                    </form>
+
+                </div>
+            <?php else: ?>
+                <button class="like post-stat__item no-btn" data-toggle="modal" data-target="#account_fail">
+                    <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30"><?=like_num($post['id'] ) ?>
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="account_fail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="exampleModalLabel">Вы не зарегистрированы</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Ок</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
 
         </div>
 
@@ -83,30 +104,43 @@ $likes = $post['likes'];
                 <?=$comments_num ?>
             </span>
 
-            <div class="like post-stat__item">
-                <form action="/php/action/like.php" method="post">
-                    <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
-                    <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
-                    <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                    <button type="submit" class="no-btn">
-                        <?php if(is_like($post['id'], $user_id)) :?>
-                            <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
-                        <?php else :?>
-                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
-                        <?php endif; ?>
-                    </button>
-                    <?=like_num($post['id'] ) ?>
-                </form>
+            <?php if(isset($_COOKIE['user'])) : ?>
+                <div class="like post-stat__item">
+                    <form action="/php/action/like.php" method="post">
+                        <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
+                        <input type="hidden" name="post_id" value="<?=$post['id']  ?>">
+                        <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                        <button type="submit" class="no-btn">
+                            <?php if(is_like($post['id'], $user_id)) :?>
+                                <img src="/resource/img/icons/like.svg" alt="" WIDTH="30">
+                            <?php else :?>
+                                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
+                            <?php endif; ?>
+                        </button>
+                        <?=like_num($post['id'] ) ?>
+                    </form>
 
+                </div>
+            <?php else: ?>
+            <div class="like post-stat__item">
+                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
+                <?=like_num($post['id'] ) ?>
             </div>
+            <?php endif; ?>
+
 
         </div>
 
 <!--        Форма для мобильной версии-->
-        <form class="comments-form_mobile" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
-            <input type="text" name="text"  placeholder="Ваш комментарий" class="comments-form__input">
-            <button type="submit" class="comments__btn d-inline">Отправить</button>
-        </form>
+        <?php if(isset($_COOKIE['user'])) :?>
+            <form class="comments-form_mobile" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
+                <input type="text" name="text"  placeholder="Ваш комментарий" class="comments-form__input">
+                <button type="submit" class="comments__btn d-inline">Отправить</button>
+            </form>
+        <?php else: ?>
+
+        <?php endif; ?>
+
 
         <div class="comments">
             <div class="comments__item">
@@ -144,10 +178,14 @@ $likes = $post['likes'];
 
         </div>
 
-        <form class="comments-form" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
-            <input type="text" name="text"  placeholder="Ваш комментарий" class="comments-form__input">
-            <button type="submit" class="comments__btn d-inline">Отправить</button>
-        </form>
+        <?php if(isset($_COOKIE['user'])) :?>
+            <form class="comments-form_mobile" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
+                <input type="text" name="text"  placeholder="Ваш комментарий" class="comments-form__input">
+                <button type="submit" class="comments__btn d-inline">Отправить</button>
+            </form>
+        <?php else: ?>
+
+        <?php endif; ?>
     </div>
 </div>
 
