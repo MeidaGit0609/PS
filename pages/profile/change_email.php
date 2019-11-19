@@ -21,15 +21,28 @@ $user_id = $_COOKIE['user'];
 if($user_id) :
     ?>
     <div class="container mt-5">
-        <form action="/php/action/changes/change_email-handler.php" class="form" method="post">
-            <div class="form-group">
-                <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили email</div>' : ''?>
-                <?=$_GET['change'] == 'email-fail' ? '<div class="alert alert-danger">Email Введён неверно</div>' : ''?>
-                <?=$_GET['change'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
-                <input type="text" name="new_email" class="form-control mb-3" placeholder="Новый email" required>
-                <button class="btn btn-md btn-success">Отправить</button>
-            </div>
-        </form>
+        <?php if($_GET['change'] == 'give_code') : ?>
+            <form action="/php/action/changes/change_email-code_handler.php" class="form" method="post">
+                <div class="form-group">
+<!--                    --><?//=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили email</div>' : ''?>
+                    <input type="text" name="code" class="form-control mb-3" placeholder="Введите код отправленный на почту" required>
+                    <button class="btn btn-md btn-primary">Отправить</button>
+                </div>
+            </form>
+        <?php else : ?>
+            <form action="/php/action/changes/change_email-handler.php" class="form" method="post">
+                <div class="form-group">
+                    <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили email</div>' : ''?>
+                    <?=$_GET['change'] == 'email-fail' ? '<div class="alert alert-danger">Email Введён неверно</div>' : ''?>
+                    <?=$_GET['change'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
+                    <?=$_GET['change'] == 'uncorrect' ? '<div class="alert alert-danger">Это ваш нынешний email</div>' : ''?>
+                    <?=$_GET['change'] == 'code_false' ? '<div class="alert alert-danger">Вы ввели неверный код</div>' : ''?>
+                    <input type="text" name="new_email" class="form-control mb-3" placeholder="Новый email" required>
+                    <button class="btn btn-md btn-success">Отправить</button>
+                </div>
+            </form>
+        <?php endif; ?>
+
     </div>
 <?php else : ?>
     <div class="alert">Вы не вошли в свой аккаунт или не создали его</div>

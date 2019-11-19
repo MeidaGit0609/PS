@@ -101,5 +101,4 @@
     </div>
 </div>
 
-<script src="https://kit.fontawesome.com/e044194a8c.js" crossorigin="anonymous"></script>
 <?php require 'includes/footer.php'; ?>

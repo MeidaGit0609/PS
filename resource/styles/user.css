@@ -6,6 +6,16 @@ b {
     color: rgba(38, 38, 38, 0.3);
     font-weight: 300;
 }
+
+.user__header {
+    display: flex;
+    align-items: center;
+}
+
+.user__header > a {
+    margin-left: 50px;
+}
+
 .avatar {
     width: 200px;
     max-width: 100%;

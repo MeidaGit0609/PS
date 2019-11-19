@@ -1,0 +1,41 @@
+.users {
+
+}
+
+.users__title {
+    margin-bottom: 30px;
+}
+
+.users__item {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.users__left {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+
+.users__left img {
+    max-width: 100%;
+    /*padding: 2px;*/
+    display: block;
+
+    border-radius: 50%;
+    /*border: 1px solid #AAAAAA;*/
+}
+
+.users__right {
+    padding-top: 5px;
+}
+
+.users__name {
+    margin-bottom: 5px;
+
+    font-size: 18px;
+}
+
+.users__status {
+
+}
