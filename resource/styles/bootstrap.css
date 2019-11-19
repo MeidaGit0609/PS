@@ -1282,3 +1282,11 @@ a.badge-dark:focus, a.badge-dark.focus {
 .mx-5 {
   margin-left: 3rem !important;
 }
+
+.nav-link {
+  transform: translateY(-2px);
+}
+
+body {
+  background-color: #fafafa;
+}

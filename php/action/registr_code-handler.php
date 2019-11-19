@@ -5,7 +5,7 @@ require_once '../functions/user_functions.php';
 $header = 'Location: ../../pages/registration.php?regist=';
 
 if(isset($_POST['code'])) {
-    $user_code = $_POST['code'];
+    $user_code = htmlspecialchars($_POST['code']);
 
     if(isset($_SESSION['code']) && $user_code == $_SESSION['code']) {
 

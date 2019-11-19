@@ -22,7 +22,7 @@ if(count($_POST) > 0) {
 //    }
 
 
-    $_SESSION['code'] = generate_email_code($user_name);
+    $_SESSION['code'] = generate_code($user_name);
 
     $user_id_array = get_user_id_by_username($user_name);
     $user_id = $user_id_array['id'];

@@ -15,11 +15,15 @@ function add_user($name_surname, $email, $phone, $username, $password) {
     mysqli_query($connection, $sql);
 }
 
-// Создаёт код для подтверждения пользователя
-function generate_email_code($username) {
-    $code = substr(md5($username), 0, 8);
+// Выдаёт всех пользователей
+function get_users() {
+    global $connection;
 
-    return $code;
+    $sql = "SELECT * FROM `users`";
+    $result = mysqli_query($connection, $sql);
+    $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    return $users;
 }
 
 // Ищет пользователя в базе по id
@@ -90,6 +94,13 @@ function change($new_info, $who, $user_id) {
 
     $sql = "UPDATE `users` SET `$who` = '$new_info' WHERE `id` = '$user_id';";
     mysqli_query($connection, $sql);
+}
+
+// Создаёт код для подтверждения пользователя
+function generate_code($string) {
+    $code = substr(md5($string), 0, 8);
+
+    return $code;
 }
 
 ?>

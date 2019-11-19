@@ -179,7 +179,7 @@ $likes = $post['likes'];
         </div>
 
         <?php if(isset($_COOKIE['user'])) :?>
-            <form class="comments-form_mobile" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
+            <form class="comments-form" action="/php/action/comment-handler.php?post_id=<?=$post['id'] ?>" method="post">
                 <input type="text" name="text"  placeholder="Ваш комментарий" class="comments-form__input">
                 <button type="submit" class="comments__btn d-inline">Отправить</button>
             </form>
@@ -294,5 +294,4 @@ $likes = $post['likes'];
 <!--    </div>-->
 <!--</div>-->
 
-<script src="https://kit.fontawesome.com/e044194a8c.js" crossorigin="anonymous"></script>
 <?php require '../includes/footer.php'; ?>
