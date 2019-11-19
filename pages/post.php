@@ -1,3 +1,4 @@
+<?php require_once '../php/config.php'; ?>
 <?php require_once '../php/functions/posts_functions.php'; ?>
 <?php require_once '../php/functions/comment_functions.php'; ?>
 <?php require_once '../php/functions/views_functions.php'; ?>
@@ -10,7 +11,7 @@
 <?php
 require '../includes/header.php';
 
-$user_id = isset($_COOKIE['user']) ? $_COOKIE['user'] : null;
+
 $post_id  = $_GET['id'];
 $post = get_post_by_id($post_id); // Массив с информацией о посте
 $comments = get_post_comment($post_id); // Массив со всеми комментариями
@@ -56,10 +57,32 @@ $likes = $post['likes'];
                         <?=like_num($post['id'] ) ?>
                     </form>
 
+                    <div class="like-users">
+                        <?php
+                        $like_users = get_like_users($post['id']);
+                        foreach($like_users as $like_user) : ?>
+                            <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
+                                <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
+                                <div class="like-users__name"><?=$like_user['username'] ?></div>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+
                 </div>
             <?php else: ?>
                 <button class="like post-stat__item no-btn" data-toggle="modal" data-target="#account_fail">
                     <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30"><?=like_num($post['id'] ) ?>
+
+                    <div class="like-users">
+                        <?php
+                        $like_users = get_like_users($post['id']);
+                        foreach($like_users as $like_user) : ?>
+                            <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
+                                <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
+                                <div class="like-users__name"><?=$like_user['username'] ?></div>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
                 </button>
 
                 <!-- Modal -->
@@ -136,6 +159,17 @@ $likes = $post['likes'];
             <div class="like post-stat__item">
                 <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
                 <?=like_num($post['id'] ) ?>
+
+                <div class="like-users">
+                    <?php
+                    $like_users = get_like_users($post['id']);
+                    foreach($like_users as $like_user) : ?>
+                        <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
+                            <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
+                            <div class="like-users__name"><?=$like_user['username'] ?></div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
             <?php endif; ?>
 
@@ -181,7 +215,13 @@ $likes = $post['likes'];
                 <div class="comments__right">
                     <p class="comments__text">
                         <b class="comments__name"><?=$user_info['username'] ?></b>
-                        <?=$comment['text'] ?></p>
+                        <?=$comment['text'] ?>
+                    </p>
+                    <?php if($comment['user_id'] == $user['id']) :?>
+                        <a href="/php/action/delete-comment.php?comment_id=<?=$comment['id'] ?>">
+                            <img src="/resource/img/icons/rubbish-bin.svg" alt="" height="20">
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
             <?php endif; ?>

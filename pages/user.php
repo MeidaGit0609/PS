@@ -64,15 +64,10 @@ if($user_id) :
             if($_COOKIE['user'] != $user_id) :
             else:
             ?>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="profile/account.php">Аккаунт</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+            <div class="account-alert">
+                <a class="nav-link" href="profile/account.php">Аккаунт</a>
+            </div>
+
             <?php endif; ?>
             <hr>
             <div class="user_posts mt-5">

@@ -1,4 +1,7 @@
 <?php
+$root = $_SERVER['DOCUMENT_ROOT'];
+$root .= '/php/db/db.php';
+include_once $root;
 
 //  Создаёт комментарий
 function add_post_comment($post_id, $text, $user_id) {
@@ -31,3 +34,11 @@ function comment_num($post_id) {
     return $comment_num;
 }
 */
+
+// Удаляет коммент
+function delete_comment($comment_id) {
+    global $connection;
+
+    $sql = "DELETE FROM `post_comment` WHERE `id` = '$comment_id'";
+    mysqli_query($connection, $sql);
+}
