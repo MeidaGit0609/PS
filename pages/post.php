@@ -120,6 +120,17 @@ $likes = $post['likes'];
                         <?=like_num($post['id'] ) ?>
                     </form>
 
+                    <div class="like-users">
+                        <?php
+                        $like_users = get_like_users($post['id']);
+                        foreach($like_users as $like_user) : ?>
+                        <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
+                            <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
+                            <div class="like-users__name"><?=$like_user['username'] ?></div>
+                        </a>
+                        <?php endforeach; ?>
+                    </div>
+
                 </div>
             <?php else: ?>
             <div class="like post-stat__item">

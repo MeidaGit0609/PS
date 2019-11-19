@@ -52,3 +52,19 @@ function like_num($post_id) {
 
     return $is_like;
 }
+
+// Выдаёт лайкнувших польщователей
+function get_like_users($post_id) {
+    global $connection;
+
+    $sql           = "SELECT `user_id` FROM `like` WHERE `post_id` = '$post_id' LIMIT 5";
+    $query         = mysqli_query($connection, $sql);
+    $like_users_id = mysqli_fetch_all($query, MYSQLI_ASSOC); // Массив с айдишниками лакнувших людей
+
+    // Циклом записываю данные пользователей(по их id)
+    for($i = 0;$i < count($like_users_id);$i++) {
+        $like_users[$i] = user_by_id($like_users_id[$i]['user_id']);
+    }
+
+    return $like_users; // Конечный массив с лайкнувшими пользователями
+}

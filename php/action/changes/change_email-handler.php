@@ -20,7 +20,7 @@ if(count($_POST) > 0) {
 
         $_SESSION['code']      = $code;
         $_SESSION['new_email'] = $new_email;
-        $header               .= 'give_code';
+        $header                .= 'give_code';
     }
 }
 else {
