@@ -8,7 +8,7 @@ require '../includes/header.php';
 ?>
 <div class="form">
     <div class="container">
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="card card-primary">
                 <div class="card-body">
                     <form method="POST" action="/php/action/auth-handler.php" role="form">

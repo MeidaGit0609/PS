@@ -4,7 +4,7 @@
 <?php require_once '../includes/header.php';  ?>
 <div class="form">
     <div class="container">
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="card card-primary">
                 <div class="card-body">
                     <?php if($_GET['regist'] == 'code') : ?>

@@ -214,14 +214,47 @@ $likes = $post['likes'];
                 </div>
                 <div class="comments__right">
                     <p class="comments__text">
-                        <b class="comments__name"><?=$user_info['username'] ?></b>
+                        <b class="comments__name"><i><?=substr($comment['datetime'], 0, 10)  ?></i> <?=$user_info['username'] ?></b>
                         <?=$comment['text'] ?>
                     </p>
-                    <?php if($comment['user_id'] == $user['id']) :?>
-                        <a href="/php/action/delete-comment.php?comment_id=<?=$comment['id'] ?>">
-                            <img src="/resource/img/icons/rubbish-bin.svg" alt="" height="20">
-                        </a>
-                    <?php endif; ?>
+                    <div class="comments__stat">
+                        <?php if($comment['user_id'] == $user['id']) :?>
+                            <a href="/php/action/delete-comment.php?comment_id=<?=$comment['id'] ?>" class="delete-icon">
+                                <img src="/resource/img/icons/rubbish-bin.svg" alt="" height="20">
+                            </a>
+                        <?php endif; ?>
+
+                        <?php if(isset($user_id)) : ?>
+                        <form action="/php/action/comment_like.php" method="post">
+                            <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                            <input type="hidden" name="comment_id" value="<?=$comment['id'] ?>">
+                            <button type="submit" class="no-btn no-padding">
+<!--                            Проверка не лайкнул пользователь этот комментарий-->
+
+                                <?php if(he_like_comment($user_id, $comment['id'])): ?>
+                                    <img src="/resource/img/icons/like.svg" alt="" WIDTH="20">
+                                <?php else: ?>
+                                    <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="20">
+                                <?php endif; ?>
+
+                            </button>
+                            <?=comments_like_num($comment['id'], $user_id) ?>
+                        </form>
+                        <?php else: ?>
+                        <div>
+<!--                        Проверка не лайкнул пользователь этот комментарий-->
+
+                            <?php if(he_like_comment($user_id, $comment['id'])): ?>
+                                <img src="/resource/img/icons/like.svg" alt="" WIDTH="20">
+                            <?php else: ?>
+                                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="20">
+                            <?php endif; ?>
+
+                            <?=comments_like_num($comment['id'], $user_id) ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+
                 </div>
             </div>
             <?php endif; ?>

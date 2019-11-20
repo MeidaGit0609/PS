@@ -1,3 +1,11 @@
+.no-padding {
+    padding: 0;
+}
+
+.delete-icon:hover {
+    text-decoration: none;
+}
+
 /* ==================
 Страница поста
 ======================*/
@@ -249,6 +257,14 @@
     margin: 0;
     margin-top: 2px;
     font-size: 13px;
+}
+
+.comments__stat {
+    margin-top: 5px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /*
