@@ -12,20 +12,19 @@
             <?php
             $subscribers = get_subscribers($user['id']);
 
-            foreach($subscribers as $subscriber) :
-//            $subscriber = user_by_id($subscriber);
-            ?>
-                <div class="users__item">
-                    <div class="users__left">
-                        <a href="/pages/user.php?id=<?=$subscriber['id'] ?>">
-                            <img src="<?=$subscriber['avatar'] ?>" alt="">
-                        </a>
-                    </div>
-                    <div class="users__right">
-                        <h3 class="users__name"><a href="/pages/user.php?id=<?=$subscriber['id'] ?>"><?=$subscriber['username'] ?></a></h3>
-                        <p class="users__status"><?=$subscriber['status'] ?></p>
-                    </div>
+
+            foreach($subscribers as $subscriber) :?>
+            <div class="users__item">
+                <div class="users__left">
+                    <a href="/pages/user.php?id=<?=$subscriber['id'] ?>">
+                        <img src="<?=$subscriber['avatar'] ?>" alt="">
+                    </a>
                 </div>
+                <div class="users__right">
+                    <h3 class="users__name"><a href="/pages/user.php?id=<?=$subscriber['id'] ?>"><?=$subscriber['username'] ?></a></h3>
+                    <p class="users__status"><?=$subscriber['status'] ?></p>
+                </div>
+            </div>
             <?php endforeach; ?>
 
 

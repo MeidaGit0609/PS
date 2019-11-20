@@ -38,9 +38,8 @@ function get_subscribers($subscribe_object) {
 
     $sql = "SELECT `subscriber_id` FROM `subscribes` WHERE `subscribe_object` = '$subscribe_object'";
     $result = mysqli_query($connection, $sql);
-    $subscribers_id = mysqli_fetch_all($result, MYSQLI_ASSOC); // Берём id Подписчиков
+    $subscribers_id = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    // Циклом записываем в переменную данные подписчиков(полученны по их id)
     for($i = 0;$i < count($subscribers_id);$i++) {
         $subscribers[$i] = user_by_id($subscribers_id[$i]['subscriber_id']);
     }
@@ -61,4 +60,15 @@ function get_subscribes($subscriber_id) {
     }
 
     return $subscribes;
+}
+
+// Считает подписки или подписчиков, что захочешь
+function count_subscribe($user_id, $who) {
+    global $connection;
+
+    $sql               = "SELECT `id` FROM `subscribes` WHERE `$who` = '$user_id'";
+    $result            = mysqli_query($connection, $sql);
+    $subscribers_count = mysqli_num_rows($result);
+
+    return $subscribers_count;
 }

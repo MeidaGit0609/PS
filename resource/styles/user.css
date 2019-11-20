@@ -45,6 +45,15 @@ b {
     margin-bottom: 10px;
 }
 
+.user__info {
+    margin: 15px 0;
+    display: flex;
+}
+
+.user__info-item {
+    margin-right: 30px;
+}
+
 .account-alert {
     margin-top: 30px;
     padding: 10px;

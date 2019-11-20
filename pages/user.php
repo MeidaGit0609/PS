@@ -16,7 +16,7 @@ require_once '../includes/header.php';
 
 $user_id = $_GET['id'];
 if($user_id) :
-    ?>
+?>
     <header class="profile-header">
         <div class="container">
             <div class="row flex-wrap-wrap">
@@ -39,9 +39,18 @@ if($user_id) :
                             <a href="/php/action/subscribe.php?subscriber_id=<?=$_COOKIE['user'] ?>&subscribe_object=<?=$user_id ?>&unsubscribe=1">Отписаться</a>
                         <?php endif; ?>
                     </div>
-                    <div class="user__public-count">
-                        <?php $posts_counter = user_posts_counter($user_id); ?>
-                        <b><?=$posts_counter ?></b> Публикация
+                    <div class="user__info">
+                        <div class="user__info-item">
+                            Публикации: <b><?=user_posts_counter($user_info['id']) ?></b>
+                        </div>
+
+                        <div class="user__info-item">
+                            Подписчики: <b><?=count_subscribe($user_info['id'], 'subscribe_object'); ?></b>
+                        </div>
+
+                        <div class="user__info-item">
+                            Подписки: <b><?=count_subscribe($user_info['id'], 'subscriber_id'); ?></b>
+                        </div>
                     </div>
                     <div class="user__name"><b><?=$user_info['name_surname'] ?></b></div>
                     <?php
