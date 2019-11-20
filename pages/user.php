@@ -39,6 +39,7 @@ if($user_id) :
                             <a href="/php/action/subscribe.php?subscriber_id=<?=$_COOKIE['user'] ?>&subscribe_object=<?=$user_id ?>&unsubscribe=1">Отписаться</a>
                         <?php endif; ?>
                     </div>
+                    <a href="/pages/dialog.php?id=<?=$user_info['id'] ?>" class="btn btn-md btn-primary">Написать сообщение</a>
                     <div class="user__info">
                         <div class="user__info-item">
                             Публикации: <b><?=user_posts_counter($user_info['id']) ?></b>
