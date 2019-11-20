@@ -30,16 +30,21 @@ if($user_id) :
                     <div class="user__header">
                         <h1 class="user__username"><?=$user_info['username'] ?></h1>
                         <?php
-                        if($_COOKIE['user'] != $user_id && is_subscribe($_COOKIE['user'], $user_id) != true) : ?>
-                        <a href="/php/action/subscribe.php?subscriber_id=<?=$_COOKIE['user'] ?>&subscribe_object=<?=$user_id ?>">Подписаться</a>
+                        if($user['id'] != $user_id && is_subscribe($user['id'], $user_id) != true) : ?>
+                        <a href="/php/action/subscribe.php?subscriber_id=<?=$user['id'] ?>&subscribe_object=<?=$user_id ?>">Подписаться</a>
                         <?php endif; ?>
 
 
-                        <?php if(is_subscribe($_COOKIE['user'], $user_id) == true) : ?>
+                        <?php if(is_subscribe($user['id'], $user_id) == true) : ?>
                             <a href="/php/action/subscribe.php?subscriber_id=<?=$_COOKIE['user'] ?>&subscribe_object=<?=$user_id ?>&unsubscribe=1">Отписаться</a>
                         <?php endif; ?>
                     </div>
+                    <?php
+                    if($user_id == $user['id']) :
+                    else:
+                    ?>
                     <a href="/pages/dialog.php?id=<?=$user_info['id'] ?>" class="btn btn-md btn-primary">Написать сообщение</a>
+                    <?php endif; ?>
                     <div class="user__info">
                         <div class="user__info-item">
                             Публикации: <b><?=user_posts_counter($user_info['id']) ?></b>
@@ -55,7 +60,7 @@ if($user_id) :
                     </div>
                     <div class="user__name"><b><?=$user_info['name_surname'] ?></b></div>
                     <?php
-                    if($_COOKIE['user'] != $user_id) : // Проверка не являеться ли пользователь хозяином этого аккаунта
+                    if($user['id'] != $user_id) : // Проверка не являеться ли пользователь хозяином этого аккаунта
                     else:
                     ?>
                         <form action="/php/action/add_avatar.php?user_id=<?=$user_id ?>" method="post" enctype="multipart/form-data" class="avatar_upload">
@@ -71,7 +76,7 @@ if($user_id) :
                 </div>
             </div>
             <?php
-            if($_COOKIE['user'] != $user_id) :
+            if($user['id'] != $user_id) :
             else:
             ?>
             <div class="account-alert">
@@ -82,7 +87,7 @@ if($user_id) :
             <hr>
             <div class="user_posts mt-5">
                 <?php
-                if($_COOKIE['user'] != $user_id) :
+                if($user['id'] != $user_id) :
                 else: ?>
                 <a class="btn btn-md btn-primary" href="/pages/add_post.php">Добавить пост</a>
                 <?php endif; ?>
@@ -101,29 +106,38 @@ if($user_id) :
                         $comments = get_post_comment($post['id']);
                         $comments_num = count($comments);
                         ?>
+
                         <div class="col-md-4 col-sm-6 col-12 mini-post post mb-4">
                             <a class="post_img w-100" href="/pages/post.php?id=<?=$post['id'] ?>">
                                 <img class="w-100 d-block" src="<?=$post['image'] ?>" alt="">
 
                                 <div class="stat w-100 h-100 post_sub">
                         <span class="views stat_item">
-                            <img src="/resource/img/icons/comment-white.svg" height="50" class="comment_icon">
+                            <img src="/resource/img/icons/comment-white.svg" width="50" class="comment_icon">
                             <?=$comments_num ?>
                         </span>
                                     <!-- like  -->
-                                    <form action="/php/action/like.php" method="post" class="like stat_item">
-                                        <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
-                                        <input type="hidden" name="post_id" value="<?=$post['id'] ?>">
-                                        <input type="hidden" name="user_id" value="<?=$user_id ?>">
-                                        <button type="submit" class="no-btn">
-                                            <?php if(is_like($post['id'], $user_id)) :?>
-                                                <img src="/resource/img/icons/like.svg" alt="" WIDTH="45">
-                                            <?php else :?>
-                                                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
-                                            <?php endif; ?>
-                                        </button>
-                                        <?=like_num($post['id'] ) ?>
-                                    </form>
+                                    <?php if(isset($_COOKIE['user'])) : ?>
+                                        <form action="/php/action/like.php" method="post" class="like stat_item">
+                                            <input type="hidden" name="likes" value="<?=$post['likes'] ?>">
+                                            <input type="hidden" name="post_id" value="<?=$post['id'] ?>">
+                                            <input type="hidden" name="user_id" value="<?=$user_id ?>">
+                                            <button type="submit" class="no-btn">
+                                                <?php if(is_like($post['id'], $user_id)) :?>
+                                                    <img src="/resource/img/icons/like.svg" alt="" WIDTH="45">
+                                                <?php else :?>
+                                                    <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
+                                                <?php endif; ?>
+                                            </button>
+                                            <?=like_num($post['id'] ) ?>
+                                        </form>
+                                    <?php else: ?>
+                                        <div class="like stat_item">
+                                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
+                                            <?=like_num($post['id'] ) ?>
+                                        </div>
+                                    <?php endif; ?>
+
                                 </div>
 
                             </a>

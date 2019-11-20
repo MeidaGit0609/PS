@@ -2,6 +2,7 @@
 <?php require_once '../php/functions/posts_functions.php'; ?>
 <?php require_once '../php/functions/comment_functions.php'; ?>
 <?php require_once '../php/functions/views_functions.php'; ?>
+<?php require_once '../php/functions/subscribe_functions.php'; ?>
 <?php require_once '../php/functions/like_functions.php'; ?>
 <?php require_once '../php/functions/user_functions.php'; ?>
 <?php require_once '../includes/head.php'; ?>
@@ -106,13 +107,21 @@ $likes = $post['likes'];
     <div class="post__right">
 
         <div class="author">
-            <div class="author__avatar">
+            <a class="author__avatar" href="/pages/user.php?id=<?=$author['id'] ?>">
                 <img src="<?=$author['avatar'] ?>" alt="">
-            </div>
-            <div class="author__username">
+            </a>
+            <a class="author__username" href="/pages/user.php?id=<?=$author['id'] ?>">
                 <b><?=$author['username'] ?> &middot;</b>
-                <a href="">Подписаться</a>
-            </div>
+<!--                Проверка не подписаны ли вы уже-->
+                <?php if($user['id'] != $author['id'] && is_subscribe($user['id'], $author['id']) != true) : ?>
+                <a href="/php/action/subscribe.php?subscriber_id=<?=$user['id'] ?>&subscribe_object=<?=$author['id'] ?>">Подписаться</a>
+                <?php endif; ?>
+
+                <?php if(is_subscribe($user['id'], $author['id']) == true) : ?>
+                    <a href="/php/action/subscribe.php?subscriber_id=<?=$user['id'] ?>&subscribe_object=<?=$author['id'] ?>&unsubscribe=1">Отписаться</a>
+                <?php endif; ?>
+
+            </a>
         </div>
 
     <!--        Статистика для мобильной версии-->
@@ -188,6 +197,7 @@ $likes = $post['likes'];
 
 
         <div class="comments">
+<!--            Описание поста-->
             <div class="comments__item">
                 <div class="comments__avatar">
                     <img src="<?=$author['avatar'] ?>" alt="">
@@ -218,11 +228,6 @@ $likes = $post['likes'];
                         <?=$comment['text'] ?>
                     </p>
                     <div class="comments__stat">
-                        <?php if($comment['user_id'] == $user['id']) :?>
-                            <a href="/php/action/delete-comment.php?comment_id=<?=$comment['id'] ?>" class="delete-icon">
-                                <img src="/resource/img/icons/rubbish-bin.svg" alt="" height="20">
-                            </a>
-                        <?php endif; ?>
 
                         <?php if(isset($user_id)) : ?>
                         <form action="/php/action/comment_like.php" method="post">
@@ -245,13 +250,20 @@ $likes = $post['likes'];
 <!--                        Проверка не лайкнул пользователь этот комментарий-->
 
                             <?php if(he_like_comment($user_id, $comment['id'])): ?>
-                                <img src="/resource/img/icons/like.svg" alt="" WIDTH="20">
+                                <img src="/resource/img/icons/like.svg" alt="" width="20">
                             <?php else: ?>
-                                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="20">
+                                <img src="/resource/img/icons/like_dis.svg" alt="" width="20">
                             <?php endif; ?>
 
                             <?=comments_like_num($comment['id'], $user_id) ?>
                         </div>
+                        <?php endif; ?>
+
+                        
+                        <?php if($comment['user_id'] == $user['id']) :?>
+                            <a href="/php/action/delete-comment.php?comment_id=<?=$comment['id'] ?>" class="delete-icon">
+                                <img src="/resource/img/icons/rubbish-bin.svg" alt="" width="20">
+                            </a>
                         <?php endif; ?>
                     </div>
 
@@ -272,110 +284,5 @@ $likes = $post['likes'];
         <?php endif; ?>
     </div>
 </div>
-
-
-
-
-<!--<div class="container" style="margin-top: 200px;">-->
-<!--    <div class="--><?//=$comments_num > 4 ? 'post-modal row flex-row' : 'post-modal-mini ' ?><!--">-->
-<!--            <div class="--><?//=$comments_num > 4 ? 'col-6' : '' ?><!-- modal__img">-->
-<!--                <div class="photo">-->
-<!--                    <img src="--><?//=$post['image'] ?><!--" alt="" class="block">-->
-<!--                </div>-->
-<!--                <div class="stat row mt-3 ml-2">-->
-<!--                    <span class="views stat_item"><i class="fas fa-eye"></i> --><?//=$post['views'] ?><!-- </span>-->
-<!--                    <span class="views stat_item"><i class="fas fa-comments"></i> --><?//=$comments_num ?><!--</span>-->
-<!---->
-<!--                    <div class="like stat_item">-->
-<!--                        <form action="/php/action/like.php" method="post">-->
-<!--                            <input type="hidden" name="likes" value="--><?//=$post['likes'] ?><!--">-->
-<!--                            <input type="hidden" name="post_id" value="--><?//=$post['id']  ?><!--">-->
-<!--                            <input type="hidden" name="user_id" value="--><?//=$user_id ?><!--">-->
-<!--                            <button type="submit" class="no-btn --><?//=is_like($post['id'] , $user_id)  ? 'active' : '' ?><!--"><i class="fas fa-heart"></i></button>-->
-<!--                            --><?//=like_num($post['id'] ) ?>
-<!--                        </form>-->
-<!---->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <p class="post-description">-->
-<!--                    --><?//=$post['description'] ?>
-<!--                </p>-->
-<!--            </div>-->
-<!--            --><?php //if($comments_num < 4) : ?>
-<!--                <div class="comments">-->
-<!--                    --><?php
-//                    // $comments это Массив со всеми комментариями
-//                    foreach($comments as $comment) :
-//                        $user_info = user_by_id($comment['user_id']);
-//                        if($user_info == null) {
-//                            continue;
-//                        }
-//                        else {
-//                    ?>
-<!--                            <div class="comment">-->
-<!--                                <div class="comment__avatar">-->
-<!--                                    <img src="--><?//=$user_info['avatar'] ?><!--" alt="">-->
-<!--                                </div>-->
-<!--                                <div class="comment__body">-->
-<!--                                    <h3 class="comment__name">--><?//=$user_info['username'] ?>
-<!--                                    </h3>-->
-<!--                                    <p class="comment__text">--><?//=$comment['text'] ?><!--</p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <hr>-->
-<!--                            --><?php
-//                        }
-//                    endforeach;
-//                    ?>
-<!--                    <form class="comments-form" action="/php/action/comment-handler.php?post_id=--><?//=$post['id'] ?><!--" method="post">-->
-<!--                        --><?//=$_GET['comment'] == 'login_fail' ? "Вы не авторизованы <br>" : '' ?>
-<!--                        --><?//=$_GET['comment'] == 'text_fail' ? "Слишком короткий комментарий (минимум 2 символа) <br>" : '' ?>
-<!--                        --><?//=$_GET['comment'] == 'happy' ? "Спасибо за комментарий <br>" : '' ?>
-<!--                        <input type="text" name="text"  placeholder="Ваш комментарий" class="form-control d-inline w-auto h-100">-->
-<!--                        <button type="submit" class="btn btn-md btn-primary d-inline mh-100">Отправить</button>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            --><?php //else : ?>
-<!--            <div class="post-comments col-5">-->
-<!--                        <div class="comments">-->
-<!--                            --><?php
-//                            // $comments это Массив со всеми комментариями
-//                            foreach($comments as $comment) :
-//                                $user_info = user_by_id($comment['user_id']);
-//                                if($user_info == null) {
-//                                    continue;
-//                                }
-//                                else {
-//                                ?>
-<!--                                    <div class="comment">-->
-<!--                                        <div class="comment__avatar">-->
-<!--                                            <img src="--><?//=$user_info['avatar'] ?><!--" alt="">-->
-<!--                                        </div>-->
-<!--                                        <div class="comment__body">-->
-<!--                                            <h3 class="comment__name">--><?//=$user_info['username'] ?>
-<!--                                            </h3>-->
-<!--                                            <p class="comment__text">--><?//=$comment['text'] ?><!--</p>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <hr>-->
-<!--                                --><?php
-//                                }
-//                                endforeach;
-//                                ?>
-<!--                        </div>-->
-<!---->
-<!--                        <form class="comments-form" action="/php/action/comment-handler.php?post_id=--><?//=$post['id'] ?><!--" method="post">-->
-<!--                            --><?//=$_GET['comment'] == 'login_fail' ? "Вы не авторизованы <br>" : '' ?>
-<!--                            --><?//=$_GET['comment'] == 'text_fail' ? "Слишком короткий комментарий (минимум 2 символа) <br>" : '' ?>
-<!--                            --><?//=$_GET['comment'] == 'happy' ? "Спасибо за комментарий <br>" : '' ?>
-<!--                            <input type="text" name="text"  placeholder="Ваш комментарий" class="form-control d-inline w-auto h-100">-->
-<!--                            <button type="submit" class="btn btn-md btn-primary d-inline mh-100">Отправить</button>-->
-<!--                        </form>-->
-<!--            </div>-->
-<!--            --><?php
-//            endif;
-//            ?>
-<!--    </div>-->
-<!--</div>-->
 
 <?php require '../includes/footer.php'; ?>

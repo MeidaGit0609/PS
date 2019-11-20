@@ -214,6 +214,15 @@
 
     border-radius: 50%;
 }
+
+.author__username {
+    margin-right: 16px;
+    color: inherit;
+}
+
+.author__username:hover {
+    color: inherit;
+}
 /*
 Описание
 */
