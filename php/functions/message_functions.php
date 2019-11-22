@@ -25,12 +25,32 @@ function add_message($recipient_id, $sender_id, $message) {
 }
 
 // Выдаёт диалоги пользователя
-function get_dialogs($me) {
+function get_dialogs($my_id) {
     global $connection;
 
-    $sql = "SELECT * FROM `messages` WHERE `recipient_id` = '$me' OR `sender_id` = '$me'";
+    $sql = "SELECT * FROM `messages` WHERE `recipient_id` = '$my_id' OR `sender_id` = '$my_id'";
     $result = mysqli_query($connection, $sql);
     $messages = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    return $messages;
+    for($i = 0;$i < count($messages);$i++) {
+        if($messages[$i]['sender_id'] == $my_id) {
+            $apponent_id[] = $messages[$i]['recipient_id'];
+        }
+        else {
+            $apponent_id[] = $messages[$i]['sender_id'];
+        }
+    }
+
+    $apponent_id = array_unique($apponent_id); // Удаляю повторяющиеся id
+
+    // Записываю с нормальными ключами
+    foreach($apponent_id as $apponent_id_i) {
+        $dialogs[] = $apponent_id_i;
+    }
+    // Записываю данные пользователей
+    for($i = 0;$i < count($dialogs);$i++) {
+        $dialogs_users[] = user_by_id($dialogs[$i]);
+    }
+
+    return $dialogs_users;
 }

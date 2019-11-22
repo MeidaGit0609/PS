@@ -8,34 +8,13 @@
 <?php
 require '../includes/header.php';
 
-$messages = get_dialogs($user_id);
+
 ?>
 
     <div class="container">
-        <pre>
             <?php
-
-            // Записываю в отдельный массив id всех оппонентов переписок
-            for($i = 0;$i < count($messages);$i++) {
-                if($messages[$i]['sender_id'] == $user_id) {
-                    $apponent_id[] = $messages[$i]['recipient_id'];
-                }
-                else {
-                    $apponent_id[] = $messages[$i]['sender_id'];
-                }
-            }
-
-            $apponent_id = array_unique($apponent_id); // Удаляю повторяющиеся id
-
-            // Записываю с нормальными ключами
-            foreach($apponent_id as $apponent_id_i) {
-                $dialogs[] = $apponent_id_i;
-            }
-            // Записываю данные пользователей
-            for($i = 0;$i < count($dialogs);$i++) {
-                $dialogs_users[] = user_by_id($dialogs[$i]);
-            }
-            ?></pre>
+            $dialogs_users = get_dialogs($user_id);
+            ?>
 
             <div class="messages">
                 <?php foreach($dialogs_users as $dialogs_user) :?>
