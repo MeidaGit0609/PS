@@ -26,6 +26,17 @@ function get_users() {
     return $users;
 }
 
+// Выдаёт пользователей по поиску
+function get_users_by_search($query) {
+    global $connection;
+
+    $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT 5";
+    $result = mysqli_query($connection, $sql);
+    $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    return $users;
+}
+
 // Ищет пользователя в базе по id
 function get_user_id_by_id($id) {
     global $connection;
