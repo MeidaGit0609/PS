@@ -27,12 +27,20 @@ function get_users() {
 }
 
 // Выдаёт пользователей по поиску
-function get_users_by_search($query) {
-    global $connection;
+function get_users_by_search($query, $page) {
+    global $connection, $postsOnePage;
 
-    $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT 5";
+    $offset = ($page - 1) * $postsOnePage;
+
+    if($offset == 0) {
+        $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT "."5";
+    }
+    else {
+        $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT "."$postsOnePage"." OFFSET "."$offset";
+    }
+
     $result = mysqli_query($connection, $sql);
-    $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $users  = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     return $users;
 }
