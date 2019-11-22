@@ -1,0 +1,107 @@
+.dialog {
+    margin-bottom: 50px;
+
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.dialog__header {
+    height: 80px;
+    padding: 5px 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid #bdbdbd;
+
+    text-align: center;
+}
+
+.dialog__opponent {
+    max-height: 100%;
+}
+
+.avatar {
+    max-width: 50px;
+    margin: 0 auto;
+
+}
+
+.avatar img {
+    max-width: 100%;
+    height: auto;
+    padding: 1px;
+    display: block;
+
+    border: 1px solid #AAAAAA;
+    border-radius: 50%;
+}
+
+.dialog__opponent-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: #898989 !important;
+}
+
+.dialog__body {
+    min-height: 400px;
+    max-height: 90%;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    margin-bottom: 15px;
+    display: flex;
+
+    overflow-y: auto;
+}
+
+.message__avatar {
+    max-width: 50px;
+}
+
+.message__avatar img {
+    border-radius: 50%;
+}
+
+.message__text {
+    margin-top: 5px;
+    margin-left: 9px;
+}
+
+.message__name {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.message__message {
+    font-size: 14px;
+    color: #4f4e4e;
+}
+
+.dialog__footer {
+    height: 50px;
+    display: flex;
+}
+
+.text-input {
+    height: 100%;
+    width: 100%;
+    padding-left: 15px;
+
+    border: 0;
+}
+
+.text-input:focus {
+    outline: 0;
+    background-color: #f1f1f1;
+}
+
+.dialog__footer .btn {
+    border-radius: 0;
+}

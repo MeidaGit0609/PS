@@ -1290,3 +1290,11 @@ a.badge-dark:focus, a.badge-dark.focus {
 body {
   background-color: #fafafa;
 }
+
+.navbar {
+  padding: 5px 10px;
+}
+
+.nav-link {
+  padding: 0;
+}

@@ -85,6 +85,6 @@ function comment_num($post_id) {
 function delete_comment($comment_id) {
     global $connection;
 
-    $sql = "DELETE FROM `post_comment` WHERE `id` = '$comment_id'";
+    $sql = "DELETE FROM `post_comment` WHERE `post_comment`.`id` = '$comment_id'";
     mysqli_query($connection, $sql);
 }
