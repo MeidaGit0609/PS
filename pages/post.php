@@ -291,7 +291,7 @@ $likes = $post['likes'];
                         <?php endif; ?>
 
                         
-                        <?php if($comment['user_id'] == $user['id']) :?>
+                        <?php if($comment['user_id'] == $user['id'] || $user['is_admin'] == 1) :?>
                             <a href="/php/action/delete-comment.php?comment_id=<?=$comment['id'] ?>" class="delete-icon">
                                 <img src="/resource/img/icons/rubbish-bin.svg" alt="" width="20">
                             </a>
