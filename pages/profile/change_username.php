@@ -25,6 +25,7 @@ if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Може�
             <div class="form-group">
                 <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили Имя пользователя</div>' : ''?>
                 <?=$_GET['change'] == 'fail' ? '<div class="alert alert-danger">Имя пользователяя введёно неверно</div>' : ''?>
+                <?=$_GET['change'] == 'very_big' ? '<div class="alert alert-danger">Имя пользователя слишком длинное</div>' : ''?>
                 <?=$_GET['change'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
                 <input type="text" name="new_username" class="form-control mb-3" placeholder="Новое имя пользователя" required>
                 <button class="btn btn-md btn-success">Отправить</button>

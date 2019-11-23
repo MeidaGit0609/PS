@@ -35,6 +35,7 @@ if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Може�
                     <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили email</div>' : ''?>
                     <?=$_GET['change'] == 'email-fail' ? '<div class="alert alert-danger">Email Введён неверно</div>' : ''?>
                     <?=$_GET['change'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
+                    <?=$_GET['change'] == 'very_big' ? '<div class="alert alert-danger">Email слишком длинноый</div>' : ''?>
                     <?=$_GET['change'] == 'uncorrect' ? '<div class="alert alert-danger">Это ваш нынешний email</div>' : ''?>
                     <?=$_GET['change'] == 'code_false' ? '<div class="alert alert-danger">Вы ввели неверный код</div>' : ''?>
                     <input type="text" name="new_email" class="form-control mb-3" placeholder="Новый email" required>

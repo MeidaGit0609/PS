@@ -123,7 +123,7 @@ $likes = $post['likes'];
                 <img src="<?=$author['avatar'] ?>" alt="">
             </a>
             <a class="author__username" href="/pages/user.php?id=<?=$author['id'] ?>">
-                <b><?=$author['username'] ?> &middot;</b>
+                <b><?=substr($author['username'], 0, 24); ?> &middot;</b>
 <!--                Проверка не подписаны ли вы уже-->
                 <?php if($user['id'] != $author['id'] && is_subscribe($user['id'], $author['id']) != true) : ?>
                 <a href="/php/action/subscribe.php?subscriber_id=<?=$user['id'] ?>&subscribe_object=<?=$author['id'] ?>">Подписаться</a>
