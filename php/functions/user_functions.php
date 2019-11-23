@@ -46,17 +46,17 @@ function get_users_by_search($query, $page) {
 }
 
 // Ищет пользователя в базе по id
-function get_user_id_by_id($id) {
-    global $connection;
-
-    $sql = "SELECT * FROM `users` WHERE `id` = '$id'";
-
-    $result = mysqli_query($connection, $sql);
-
-    $user = mysqli_fetch_assoc($result);
-
-    return $user;
-}
+//function get_user_by_id($id) {
+//    global $connection;
+//
+//    $sql = "SELECT * FROM `users` WHERE `id` = '$id'";
+//
+//    $result = mysqli_query($connection, $sql);
+//
+//    $user = mysqli_fetch_assoc($result);
+//
+//    return $user;
+//}
 
 // Ищет пользователя в базе по username'y
 function get_user_id_by_username($username) {

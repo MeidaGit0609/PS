@@ -16,7 +16,7 @@ require '../includes/header.php';
 $post_id  = $_GET['id'];
 $post = get_post_by_id($post_id); // Массив с информацией о посте
 $comments = get_post_comment($post_id); // Массив со всеми комментариями
-$author = get_user_id_by_id($post['user_id']);
+$author = user_by_id($post['user_id']);
 
 
 // Добавляем просмотр
@@ -25,6 +25,7 @@ $comments_num = count($comments);
 $likes = $post['likes'];
 ?>
 
+<?php if(isset($post)) : ?>
 <div class="post">
     <div class="post__content">
         <div class="post__img">
@@ -58,32 +59,36 @@ $likes = $post['likes'];
                         <?=like_num($post['id'] ) ?>
                     </form>
 
-                    <div class="like-users">
-                        <?php
-                        $like_users = get_like_users($post['id']);
-                        foreach($like_users as $like_user) : ?>
-                            <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
-                                <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
-                                <div class="like-users__name"><?=$like_user['username'] ?></div>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
+                    <?php if(like_num($post['id']) > 0) :?>
+                        <div class="like-users">
+                            <?php
+                            $like_users = get_like_users($post['id']);
+                            foreach($like_users as $like_user) : ?>
+                                <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
+                                    <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
+                                    <div class="like-users__name"><?=$like_user['username'] ?></div>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
 
                 </div>
             <?php else: ?>
                 <button class="like post-stat__item no-btn" data-toggle="modal" data-target="#account_fail">
                     <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30"><?=like_num($post['id'] ) ?>
 
-                    <div class="like-users">
-                        <?php
-                        $like_users = get_like_users($post['id']);
-                        foreach($like_users as $like_user) : ?>
-                            <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
-                                <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
-                                <div class="like-users__name"><?=$like_user['username'] ?></div>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
+                    <?php if(like_num($post['id']) > 0) :?>
+                        <div class="like-users">
+                            <?php
+                            $like_users = get_like_users($post['id']);
+                            foreach($like_users as $like_user) : ?>
+                                <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
+                                    <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
+                                    <div class="like-users__name"><?=$like_user['username'] ?></div>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 </button>
 
                 <!-- Modal -->
@@ -100,6 +105,13 @@ $likes = $post['likes'];
                     </div>
                 </div>
             <?php endif; ?>
+
+            <?php if($post_id == $user['id'] || $user['is_admin'] == 1) :?>
+                <form class="post-stat__item" method="post" action="/php/action/delete-post.php">
+                    <input type="hidden" name="post_id" value="<?=$post_id ?>">
+                    <button type="submit">Удалить пост</button>
+                </form>
+            <?php endif;?>
 
         </div>
 
@@ -152,16 +164,18 @@ $likes = $post['likes'];
                         <?=like_num($post['id'] ) ?>
                     </form>
 
-                    <div class="like-users">
-                        <?php
-                        $like_users = get_like_users($post['id']);
-                        foreach($like_users as $like_user) : ?>
-                        <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
-                            <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
-                            <div class="like-users__name"><?=$like_user['username'] ?></div>
-                        </a>
-                        <?php endforeach; ?>
-                    </div>
+                    <?php if(like_num($post['id']) > 0) :?>
+                        <div class="like-users">
+                            <?php
+                            $like_users = get_like_users($post['id']);
+                            foreach($like_users as $like_user) : ?>
+                            <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
+                                <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
+                                <div class="like-users__name"><?=$like_user['username'] ?></div>
+                            </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
 
                 </div>
             <?php else: ?>
@@ -169,18 +183,27 @@ $likes = $post['likes'];
                 <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="30">
                 <?=like_num($post['id'] ) ?>
 
-                <div class="like-users">
-                    <?php
-                    $like_users = get_like_users($post['id']);
-                    foreach($like_users as $like_user) : ?>
-                        <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
-                            <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
-                            <div class="like-users__name"><?=$like_user['username'] ?></div>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
+                <?php if(like_num($post['id']) > 0) :?>
+                    <div class="like-users">
+                        <?php
+                        $like_users = get_like_users($post['id']);
+                        foreach($like_users as $like_user) : ?>
+                            <a class="like-users__item" href="user.php?id=<?=$like_user['id'] ?>">
+                                <img src="<?=$like_user['avatar'] ?>" alt="" class="like-users__avatar">
+                                <div class="like-users__name"><?=$like_user['username'] ?></div>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
+
+            <?php if($post_id == $user['id'] || $user['is_admin'] == 1) :?>
+                <form class="post-stat__item" method="post" action="/php/action/delete-post.php">
+                    <input type="hidden" name="post_id" value="<?=$post_id ?>">
+                    <button type="submit">Удалить пост</button>
+                </form>
+            <?php endif;?>
 
 
         </div>
@@ -198,17 +221,25 @@ $likes = $post['likes'];
 
         <div class="comments">
 <!--            Описание поста-->
-            <div class="comments__item">
-                <div class="comments__avatar">
-                    <img src="<?=$author['avatar'] ?>" alt="">
+            <?php if(strlen($post['description']) > 1) : ?>
+                <div class="comments__item">
+                    <div class="comments__avatar">
+                        <img src="<?=$author['avatar'] ?>" alt="">
+                    </div>
+                    <div class="comments__right">
+                        <p class="comments__text">
+                            <b class="comments__name"><?=$author['username'] ?></b>
+                            <?=$post['description'] ?>
+                        </p>
+                    </div>
                 </div>
-                <div class="comments__right">
-                    <p class="comments__text">
-                        <b class="comments__name"><?=$author['username'] ?></b>
-                        <?=$post['description'] ?>
-                    </p>
+            <?php else: ?>
+                <div class="comments__item">
+                    <p>Описание отсутствует</p>
+
                 </div>
-            </div>
+            <?php endif; ?>
+
             <?php
             foreach($comments as $comment) :
                 $user_info = user_by_id($comment['user_id']);
@@ -282,7 +313,10 @@ $likes = $post['likes'];
         <?php else: ?>
 
         <?php endif; ?>
-    </div>
-</div>
+    </div> <!--/ .post__right-->
+</div> <!--/ .post-->
+<?php else: ?>
+<div class="alert alert-danger">Пост не найден</div>
+<?php endif; ?>
 
 <?php require '../includes/footer.php'; ?>
