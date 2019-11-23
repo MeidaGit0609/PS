@@ -18,12 +18,19 @@ if(count($_POST) > 0) {
         $header .= 'uncorrect';
     }
     else {
-        $code = generate_code($new_email);
-        mail($new_email, 'Смена email', "Код подтверждения: $code");
+        if($user['is_admin'] == 1 && $user_info['id'] != $user['id']) { // Если ты админ и это не твой аккаунт
+            change($new_email, 'email', $user_id);
+            $header .= 'happy';
+        }
+        else {
+            $code = generate_code($new_email);
+            mail($new_email, 'Смена email', "Код подтверждения: $code");
 
-        $_SESSION['code']      = $code;
-        $_SESSION['new_email'] = $new_email;
-        $header                .= 'give_code';
+            $_SESSION['code']      = $code;
+            $_SESSION['new_email'] = $new_email;
+            $header                .= 'give_code';
+        }
+
     }
 }
 else {
