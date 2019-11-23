@@ -2,10 +2,22 @@
 require_once '../functions/user_functions.php';
 
 $prev_page = $_SERVER['HTTP_REFERER'];
-$prev_page = explode('?', $prev_page);
-$prev_page = $prev_page[0];
+if(stristr($prev_page, 'upload=') !== false) {
+    $prev_page = explode('upload=', $prev_page);
+    $prev_page = $prev_page[0];
+}
 
-$header = "Location: ${prev_page}?upload=";
+// Для красивого url
+if(substr($prev_page, (strlen($prev_page) - 1), 1) == '&') { // Не заканчиваеться ли url на &
+    $header = "Location: ${prev_page}upload=";
+}
+elseif(stristr($prev_page, '?') !== false) { // В url есть get запросы
+    $header = "Location: ${prev_page}&upload=";
+}
+else {
+    $header = "Location: ${prev_page}?upload=";
+}
+
 
 $root = $_SERVER['DOCUMENT_ROOT'];
 
