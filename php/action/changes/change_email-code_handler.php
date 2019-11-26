@@ -3,8 +3,7 @@ session_start();
 require_once '../../config.php';
 require_once '../../functions/user_functions.php';
 
-$prev_page = $_SERVER['HTTP_REFERER'];
-$header = "Location: $prev_page&change=";
+$header = 'Location: ../../../pages/profile/change_email.php?change=';
 
 if(isset($_POST['code'])) {
     $user_code = htmlspecialchars($_POST['code']);
@@ -13,7 +12,7 @@ if(isset($_POST['code'])) {
 
     if(isset($real_code) && $user_code == $real_code) {
 
-        change($new_email, 'email', $_GET['user_id']);
+        change($new_email, 'email', $user['id']);
 
         $header .= 'happy';
     }

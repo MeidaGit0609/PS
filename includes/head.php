@@ -1,4 +1,3 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/php/functions/curriencies_functions.php'; ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,4 +10,3 @@
     <link href="/resource/styles/bootstrap-grid.css" rel="stylesheet">
     <link href="/resource/styles/bootstrap.css" rel="stylesheet">
     <link href="/resource/styles/style.css" rel="stylesheet">
-    <link href="/resource/styles/footer.css" rel="stylesheet">

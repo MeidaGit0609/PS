@@ -28,7 +28,7 @@ if(count($_POST) > 0) {
         header($header . 'img_very-mini');
         die();
     }
-    elseif($img['size'] > 1000000) {
+    elseif($img['size'] > 200000) {
         header($header . 'img_very-big');
         die();
     }

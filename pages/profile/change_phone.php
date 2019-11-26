@@ -17,11 +17,11 @@ require_once '../../includes/head.php';
 <?php
 require_once '../../includes/header.php';
 
-$user_id = $_GET['user_id'];
-if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Может ли пользователь менять эту информацию
+$user_id = $_COOKIE['user'];
+if($user_id) :
     ?>
     <div class="container mt-5">
-        <form action="/php/action/changes/change_phone-handler.php?user_id=<?=$user_id ?>" class="form" method="post">
+        <form action="/php/action/changes/change_phone-handler.php" class="form" method="post">
             <div class="form-group">
                 <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили Номер телефона</div>' : ''?>
                 <?=$_GET['change'] == 'fail' ? '<div class="alert alert-danger">Телефон введён неверно</div>' : ''?>
@@ -32,7 +32,7 @@ if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Може�
         </form>
     </div>
 <?php else : ?>
-    <div class="alert">Неправильный адрес</div>
+    <div class="alert">Вы не вошли в свой аккаунт или не создали его</div>
 <?php endif; ?>
 
 

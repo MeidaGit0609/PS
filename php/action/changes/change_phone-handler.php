@@ -14,9 +14,6 @@ function checkPhoneNumber($phoneNumber)
         {
             return FALSE;
         }
-        elseif(strlen($phoneNumber) > 17) {
-            return false;
-        }
         else
         {
             return $phoneNumber;
@@ -32,10 +29,10 @@ $header = 'Location: ../../../pages/profile/change_phone.php?change=';
 
 if(count($_POST) > 0) {
     $new_phone = trim($_POST['new_phone']);
-    $new_phone = checkPhoneNumber($new_phone);
-    $user_id   = $_GET['user_id'];
-    $user_info = user_by_id($user_id);
 
+    $new_phone = checkPhoneNumber($new_phone);
+
+//    $header .= $new_phone;
 
     if($new_phone == false) {
         $header .= 'fail';
