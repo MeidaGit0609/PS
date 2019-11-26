@@ -16,33 +16,51 @@ require_once $config_way;
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <?php $categories = get_categories(); ?>
 
-            <li class="nav-item active">
-                <a class="nav-link" href="/pages/user.php?id=<?=$user['id'] ?>">Профиль</a>
-            </li>
+<!--            <li class="nav-item active">-->
+<!--                <a class="nav-link" href="/pages/user.php?id=--><?//=$user['id'] ?><!--">Профиль</a>-->
+<!--            </li>-->
 
-            <?php if(isset($_COOKIE['user'])) :?>
-
+            <?php if(isset($_COOKIE['user'])) :// Зарегистрирован?>
                 <?php foreach($categories as $category) :?>
-                    <?php if($category['only_registr'] == 1): ?>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?=$category['link'] ?>"><?=$category['title'] ?></a>
-                        </li>
+                    <?php if($category['access'] == 1): ?>
+                        <?php if($category['title'] == 'Профиль') :?>
+                            <li class="nav-access active">
+                                <a class="nav-link" href="<?=$category['link'] . $_COOKIE['user']?>"><?=$category['title'] ?></a>
+                        <?php else:?>
+                            <li class="nav-access active">
+                                <a class="nav-link" href="<?=$category['link']?>"><?=$category['title'] ?></a>
+                            </li>
+                        <?php endif; ?>
                     <?php else: ?>
-
                     <?php endif; ?>
                 <?php endforeach; ?>
 
+            <?php elseif(!isset($_COOKIE['user'])):  // Не зарегистрирован?>
+                <?php foreach($categories as $category) : ?>
+                    <?php if($category['access'] == 2): ?>
+
+                        <li class="nav-access active">
+                            <a class="nav-link" href="<?=$category['link'] ?>"><?=$category['title'] ?></a>
+                        </li>
+
+                    <?php endif; ?>
+                <?php endforeach; ?>
             <?php endif;  ?>
 
-            <?php foreach($categories as $category) :?>
-                <?php if($category['only_registr'] != 1): ?>
+
+            <?php foreach($categories as $category) : // Неважно?>
+                <?php if($category['access'] == 0): ?>
+
                     <li class="nav-item active">
                         <a class="nav-link" href="<?=$category['link'] ?>"><?=$category['title'] ?></a>
                     </li>
-                <?php else: ?>
 
+                <?php else: ?>
                 <?php endif; ?>
             <?php endforeach; ?>
+
+
+
         </ul>
     </div>
 

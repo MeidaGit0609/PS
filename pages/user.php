@@ -80,10 +80,11 @@ if($user_id && isset($user_info)) : // Указан id и информация �
             if($user['id'] != $user_id && $user['is_admin'] == 0) :
             else:
             ?>
-            <div class="account-alert">
-                <a class="nav-link" href="profile/account.php?user_id=<?=$user_info['id'] ?>">Аккаунт</a>
+            <div class="account-alert row">
+                <a class="nav-link mr-5" href="profile/account.php?user_id=<?=$user_info['id'] ?>">Аккаунт</a>
+                <a class="nav-link mr-5" href="subscribes.php?id=<?=$user_info['id'] ?>">Подписки</a>
+                <a class="nav-link mr-5" href="subscribers.php?id=<?=$user_info['id'] ?>">Подписчики</a>
             </div>
-
             <?php endif; ?>
             <hr>
             <div class="user_posts mt-5">
