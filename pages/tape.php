@@ -23,9 +23,15 @@
 
             $user_id = $_COOKIE['user'];
 
-            $posts = get_posts($page);
+            $posts     = get_subscribes_posts($page, $user['id']);
+            $posts_num = $posts[1];
+            $posts     = $posts[0];
+
+            if(!empty($posts)) :
+
+
             foreach($posts as $post) :
-                $comments = get_post_comment($post['id']);
+                $comments     = get_post_comment($post['id']);
                 $comments_num = count($comments);
                 ?>
                 <div class="col-md-4 col-sm-6 col-12 mini-post post mb-4">
@@ -75,7 +81,7 @@
 
 
                 <?php
-                $forLimit = posts_num() / $postsOnePage;
+                $forLimit = $posts_num / $postsOnePage;
                 $forLimit = ceil($forLimit);
                 ?>
 
@@ -96,6 +102,9 @@
 
 
             </div>
+            <?php else: ?>
+                <div class="alert alert-info">Вы нинакого не подписались.</div>
+            <?php endif; ?>
         </div>
     </div>
 

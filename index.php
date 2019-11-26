@@ -4,7 +4,7 @@
 <?php require_once 'php/functions/comment_functions.php'; ?>
 <?php require_once 'php/functions/like_functions.php'; ?>
 <?php require_once 'includes/head.php'; ?>
-    <link rel="stylesheet" href="/resource/styles/index-page.css">
+<link rel="stylesheet" href="/resource/styles/index-page.css">
 </head>
 <body>
 <?php require 'includes/header.php'; ?>
@@ -23,19 +23,11 @@
 
         $user_id = $_COOKIE['user'];
 
-        $posts     = get_subscribes_posts($page, $user['id']);
-        $posts_num = $posts[1];
-        $posts     = $posts[0];
-
-        echo '<pre>';
-        print_r($posts);
-        print_r($posts_num);
-        echo '</pre>';
-
+        $posts = get_posts($page);
         foreach($posts as $post) :
-        $comments     = get_post_comment($post['id']);
-        $comments_num = count($comments);
-        ?>
+            $comments = get_post_comment($post['id']);
+            $comments_num = count($comments);
+            ?>
             <div class="col-md-4 col-sm-6 col-12 mini-post post mb-4">
                 <a class="post_img w-100" href="/pages/post.php?id=<?=$post['id'] ?>">
                     <img class="w-100 d-block" src="<?=$post['image'] ?>" alt="">
@@ -61,10 +53,10 @@
                                 <?=like_num($post['id'] ) ?>
                             </form>
                         <?php else: ?>
-                        <div class="like stat_item">
-                            <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
-                            <?=like_num($post['id'] ) ?>
-                        </div>
+                            <div class="like stat_item">
+                                <img src="/resource/img/icons/like_dis.svg" alt="" WIDTH="45">
+                                <?=like_num($post['id'] ) ?>
+                            </div>
                         <?php endif; ?>
 
                     </div>
@@ -83,7 +75,7 @@
 
 
             <?php
-            $forLimit = $posts_num / $postsOnePage;
+            $forLimit = posts_num() / $postsOnePage;
             $forLimit = ceil($forLimit);
             ?>
 

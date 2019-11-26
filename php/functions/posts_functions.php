@@ -58,39 +58,48 @@ function get_subscribes_posts($page, $user_id) {
     // Объекты подписки
     $subscribes = get_subscribes($user_id);
 
-    for($i = 0;$i < count($subscribes);$i++) { // Беру их id
-        $subscribes_id[] = $subscribes[$i]['id'];
-    }
+    if(!empty($subscribes)) {
+
+        for($i = 0;$i < count($subscribes);$i++) { // Беру их id
+            $subscribes_id[] = $subscribes[$i]['id'];
+        }
 
 
 
-    for($i = 0;$i < count($subscribes_id);$i++) { // По их id ищу их статьи и записываю в массив
-        $sql = "SELECT * FROM `posts` WHERE `user_id` = $subscribes_id[$i] ORDER BY `views` DESC ;";
-        $result = mysqli_query($connection, $sql);
 
-        $posts_one_subscribes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        for ($i = 0; $i < count($subscribes_id); $i++) { // По их id ищу их статьи и записываю в массив
+            $sql = "SELECT * FROM `posts` WHERE `user_id` = $subscribes_id[$i] ORDER BY `views` DESC ;";
+            $result = mysqli_query($connection, $sql);
 
-        foreach($posts_one_subscribes as $post_one_subscribe) {
-            $posts[] = $post_one_subscribe;
+            $posts_one_subscribes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+            foreach ($posts_one_subscribes as $post_one_subscribe) {
+                $posts[] = $post_one_subscribe;
+            }
+        }
+
+        if(!empty($posts)) {
+
+            // Сортирую в правильном порядке
+            function cmp($a, $b)
+            {
+                return -($a['views'] - $b['views']);
+            }
+
+            usort($posts, "cmp");
+
+            // Пагинация
+            for ($i = $offset; $i < ($offset + $postsOnePage); $i++) {
+                if (!is_array($posts[$i])) {
+                    break;
+                }
+                $posts_limit[] = $posts[$i];
+            }
+
+            $posts_num = count($posts);
+            return [$posts_limit, $posts_num];
         }
     }
-
-    // Сортирую в правильном порядке
-    function cmp($a, $b){
-        return -($a['views'] - $b['views']);
-    }
-    usort($posts, "cmp");
-
-    // Пагинация
-    for($i = $offset;$i < ($offset + $postsOnePage);$i++) {
-        if(!is_array($posts[$i])) {
-            break;
-        }
-        $posts_limit[] = $posts[$i];
-    }
-
-    $posts_num = count($posts);
-    return [$posts_limit, $posts_num];
 }
 
 
