@@ -38,7 +38,7 @@ function get_posts($page) {
 
     $offset = ($page - 1) * $postsOnePage;
 
-    $sql = "SELECT * FROM `posts` LIMIT $postsOnePage OFFSET $offset ;";
+    $sql = "SELECT * FROM `posts` ORDER BY `views` DESC LIMIT $postsOnePage OFFSET $offset ;";
     $result = mysqli_query($connection, $sql);
     $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
 

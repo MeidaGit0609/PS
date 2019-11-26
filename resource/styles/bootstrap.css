@@ -1304,6 +1304,10 @@ body {
   padding: 5px 10px;
 }
 
+.navbar + div {
+  min-height: 80%;
+}
+
 .nav-link {
   padding: 0;
 }
