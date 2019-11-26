@@ -32,6 +32,7 @@
 
 .post__content {
     width: 60%;
+    padding-bottom: 10px;
 }
 
 .post__right {
@@ -235,8 +236,9 @@
 }
 
 .comments__item {
-    display: flex;
+    width: 100%;
     margin-bottom: 20px;
+    display: flex;
 }
 
 .comments__avatar {
@@ -254,6 +256,10 @@
 
     border-radius: 50%;
     border: 1px solid #AAAAAA;
+}
+
+.comments__right {
+    width: 100%;
 }
 
 .comments__name {
