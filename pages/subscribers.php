@@ -7,28 +7,34 @@
 <?php require '../includes/header.php'; ?>
 
     <div class="container">
-        <div class="users">
-            <h1 class="users__title">Ваши подписчики: </h1>
-            <?php
-            $subscribers = get_subscribers($user['id']);
+        <?php if(user_by_id($user['id']) != null): ?>
+            <div class="users">
+                <h1 class="users__title">Подписчики: </h1>
+                <?php
+                $subscribers = get_subscribers($user['id']);
 
 
-            foreach($subscribers as $subscriber) :?>
-            <div class="users__item">
-                <div class="users__left">
-                    <a href="/pages/user.php?id=<?=$subscriber['id'] ?>">
-                        <img src="<?=$subscriber['avatar'] ?>" alt="">
-                    </a>
-                </div>
-                <div class="users__right">
-                    <h3 class="users__name"><a href="/pages/user.php?id=<?=$subscriber['id'] ?>"><?=$subscriber['username'] ?></a></h3>
-                    <p class="users__status"><?=$subscriber['status'] ?></p>
-                </div>
+                if(is_array($subscribers) && count($subscribers) > 0) {
+                    foreach ($subscribers as $subscriber) :?>
+                        <div class="users__item">
+                            <div class="users__left">
+                                <a href="/pages/user.php?id=<?=$subscriber['id'] ?>">
+                                    <img src="<?=$subscriber['avatar'] ?>" alt="">
+                                </a>
+                            </div>
+                            <div class="users__right">
+                                <h3 class="users__name"><a href="/pages/user.php?id=<?=$subscriber['id'] ?>"><?=$subscriber['username'] ?></a></h3>
+                                <p class="users__status"><?=$subscriber['status'] ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php } ?>
+
+
             </div>
-            <?php endforeach; ?>
-
-
-        </div>
+        <?php else: ?>
+            <div class="alert alert-info">Вы не зарегистрированы</div>
+        <?php endif; ?>
     </div>
 
 <?php require '../includes/footer.php'; ?>
