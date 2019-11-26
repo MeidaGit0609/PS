@@ -11,29 +11,23 @@ require_once '../../includes/head.php';
 <?php
 require_once '../../includes/header.php';
 
-$user_info = user_by_id($_GET['user_id']); // массив пользователя информацию которого мы выводим
-if($user_info) :
+$user_id = $_COOKIE['user'];
+if($user_id) :
 ?>
 <div class="container">
-    <?php if($user['is_admin'] == 1 || $user_info['id'] == $user['id']) :?>
-        <p>Ваше имя и фамилия: <?=$user_info['name_surname'] ?> <a href="change_name-surname.php?user_id=<?=$user_info['id'] ?>">изменить имя и фамилию</a>  </p>
-        <p>Ваше имя пользователя: <?=$user_info['username'] ?> <a href="change_username.php?user_id=<?=$user_info['id'] ?>">изменить имя пользователя</a>  </p>
-        <p>
-        <?PHP
-        if($user['phone'] == 'Телефон не указан') echo "${user['phone']}";
-        else echo "Ваш номер телефона: ${user['phone']} ";
-        ?>
-        <a href="change_phone.php?user_id=<?=$user_info['id'] ?>">изменить номер телефона</a>
-        </p>
-        <p>Ваш электронный адрес: <?=$user_info['email'] ?> <a href="change_email.php?user_id=<?=$user_info['id'] ?>">изменить email</a></p>
-        <a href="change_password.php?user_id=<?=$user_info['id'] ?>">изменить пароль</a>
-        <br>
-        <?php if($user_info['id'] == $user_id) :?>
-            <button class="btn btn-md btn-primary mt-4" data-toggle="modal" data-target="#exampleModal">Выйти из аккаунта</button>
-        <?php endif; ?>
-    <?php else: ?>
-    <p>Вы не являетесь адмиином, чтобы видеть эту информацию</p>
-    <?php endif; ?>
+    <p>Ваше имя и фамилия: <?=$user['name_surname'] ?> <a href="change_name-surname.php">изменить имя и фамилию</a>  </p>
+    <p>Ваше имя пользователя: <?=$user['username'] ?> <a href="change_username.php">изменить имя пользователя</a>  </p>
+    <p>
+    <?PHP
+    if($user['phone'] == 'Телефон не указан') echo "${user['phone']}";
+    else echo "Ваш номер телефона: ${user['phone']} ";
+    ?>
+    <a href="change_phone.php">изменить номер телефона</a>
+    </p>
+    <p>Ваш электронный адрес: <?=$user['email'] ?> <a href="change_email.php">изменить email</a></p>
+    <a href="change_password.php">изменить пароль</a>
+    <br>
+    <button class="btn btn-md btn-primary mt-4" data-toggle="modal" data-target="#exampleModal">Выйти из аккаунта</button>
 </div>
 
 <!-- Modal -->
@@ -52,7 +46,7 @@ if($user_info) :
 </div>
 
 <?php else : ?>
-    <div class="alert">Информации о таком пользователе не существует</div>
+    <div class="alert">Вы не вошли в свой аккаунт или не создали его</div>
 <?php endif; ?>
 
 

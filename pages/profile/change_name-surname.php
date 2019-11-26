@@ -12,20 +12,19 @@ require_once '../../includes/head.php';
             margin: 0 auto;
         }
     </style>
-</head>
-<body>
+    </head>
+    <body>
 <?php
 require_once '../../includes/header.php';
 
-$user_id = $_GET['user_id'];
-if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Может ли пользователь менять эту информацию
-?>
+$user_id = $_COOKIE['user'];
+if($user_id) :
+    ?>
     <div class="container mt-5">
-        <form action="/php/action/changes/change_name_surname-handler.php?user_id=<?=$user_id ?>" class="form" method="post">
+        <form action="/php/action/changes/change_name_surname-handler.php" class="form" method="post">
             <div class="form-group">
                 <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили имя и фамилию</div>' : ''?>
                 <?=$_GET['change'] == 'name_surname-fail' ? '<div class="alert alert-danger">Поле заполнено неверно</div>' : ''?>
-                <?=$_GET['change'] == 'very_big' ? '<div class="alert alert-danger">Имя и фамилия слишком длинные</div>' : ''?>
                 <?=$_GET['change'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
                 <input type="text" name="new_name_surname" class="form-control mb-3" placeholder="Новые имя и фамилия" required>
                 <button class="btn btn-md btn-success">Отправить</button>
@@ -33,7 +32,7 @@ if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Може�
         </form>
     </div>
 <?php else : ?>
-    <div class="alert">Неправильный адрес</div>
+    <div class="alert">Вы не вошли в свой аккаунт или не создали его</div>
 <?php endif; ?>
 
 

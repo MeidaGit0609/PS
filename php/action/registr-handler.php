@@ -27,16 +27,16 @@ if(count($_POST) > 0) {
     $user_id_array = get_user_id_by_username($user_name);
     $user_id = $user_id_array['id'];
 
-    if(str_word_count($name_surname) < 2 ||  strlen($name_surname) < 5 || strlen($name_surname) > 40) {
+    if(str_word_count($name_surname) < 2 ||  strlen($name_surname) < 5) {
         $header .= 'name_surname-fail';
     }
     elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $header .= 'email-fail';
     }
-    elseif(strlen($user_name) <= 2 || is_numeric($user_name) || strlen($user_name) > 50) {
+    elseif(strlen($user_name) <= 2 || is_numeric($user_name)) {
         $header .= 'username-fail';
     }
-    elseif(strlen($password) < 6 || strlen($password) > 40) {
+    elseif(strlen($password) < 6) {
         $header .= 'password-fail';
     }
     elseif($password_repeat !== $password) {

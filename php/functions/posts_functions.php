@@ -20,17 +20,6 @@ function add_post($img, $description, $user_id) {
     }
 }
 
-// Удаляет пост
-function delete_post($post_id) {
-    global $connection;
-
-    $delete_likes_sql = "DELETE FROM `like` WHERE `post_id` = '$post_id'";
-    mysqli_query($connection, $delete_likes_sql);
-
-    $delete_post_sql = "DELETE FROM `posts` WHERE `id` = '$post_id'";
-    mysqli_query($connection, $delete_post_sql);
-}
-
 
 // Выдаёт все посты из базы данных
 function get_posts($page) {

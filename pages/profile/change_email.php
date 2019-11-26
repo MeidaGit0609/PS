@@ -17,12 +17,12 @@ require_once '../../includes/head.php';
 <?php
 require_once '../../includes/header.php';
 
-$user_id = $_GET['user_id'];
-if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Может ли пользователь менять эту информацию
-?>
+$user_id = $_COOKIE['user'];
+if($user_id) :
+    ?>
     <div class="container mt-5">
         <?php if($_GET['change'] == 'give_code') : ?>
-            <form action="/php/action/changes/change_email-code_handler.php?user_id=<?=$user_id ?>" class="form" method="post">
+            <form action="/php/action/changes/change_email-code_handler.php" class="form" method="post">
                 <div class="form-group">
 <!--                    --><?//=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили email</div>' : ''?>
                     <input type="text" name="code" class="form-control mb-3" placeholder="Введите код отправленный на почту" required>
@@ -30,12 +30,11 @@ if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Може�
                 </div>
             </form>
         <?php else : ?>
-            <form action="/php/action/changes/change_email-handler.php?user_id=<?=$user_id ?>" class="form" method="post">
+            <form action="/php/action/changes/change_email-handler.php" class="form" method="post">
                 <div class="form-group">
                     <?=$_GET['change'] == 'happy' ? '<div class="alert alert-success">Вы успешно изменили email</div>' : ''?>
                     <?=$_GET['change'] == 'email-fail' ? '<div class="alert alert-danger">Email Введён неверно</div>' : ''?>
                     <?=$_GET['change'] == 'input_fail' ? '<div class="alert alert-danger">Заполните поле</div>' : ''?>
-                    <?=$_GET['change'] == 'very_big' ? '<div class="alert alert-danger">Email слишком длинноый</div>' : ''?>
                     <?=$_GET['change'] == 'uncorrect' ? '<div class="alert alert-danger">Это ваш нынешний email</div>' : ''?>
                     <?=$_GET['change'] == 'code_false' ? '<div class="alert alert-danger">Вы ввели неверный код</div>' : ''?>
                     <input type="text" name="new_email" class="form-control mb-3" placeholder="Новый email" required>
@@ -46,7 +45,7 @@ if($user_id && $user['id'] == $user_id || $user['is_admin'] == 1) : // Може�
 
     </div>
 <?php else : ?>
-    <div class="alert">Неправильный адрес</div>
+    <div class="alert">Вы не вошли в свой аккаунт или не создали его</div>
 <?php endif; ?>
 
 

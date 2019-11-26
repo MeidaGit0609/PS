@@ -14,14 +14,13 @@ require_once '../includes/head.php';
 <?php
 require_once '../includes/header.php';
 
-
-$user_id = $_GET['id']; // id эттого юзера
-$user_info = user_by_id($user_id); // Информация об этом юзере
-if($user_id && isset($user_info)) : // Указан id и информация есть
+$user_id = $_GET['id'];
+if($user_id) :
 ?>
     <header class="profile-header">
         <div class="container">
             <div class="row flex-wrap-wrap">
+                <? $user_info = user_by_id($user_id); ?>
                 <div class="col-md-3 col-sm-4 col-lg-2 col-3 avatar-wrapper">
                     <div class="avatar">
                         <img src="<?=$user_info['avatar'] ?>" alt="">
@@ -61,7 +60,7 @@ if($user_id && isset($user_info)) : // Указан id и информация �
                     </div>
                     <div class="user__name"><b><?=$user_info['name_surname'] ?></b></div>
                     <?php
-                    if($user['id'] != $user_id && $user['is_admin'] == 0) : // Проверка не являеться ли пользователь хозяином этого аккаунта или админом
+                    if($user['id'] != $user_id) : // Проверка не являеться ли пользователь хозяином этого аккаунта
                     else:
                     ?>
                         <form action="/php/action/add_avatar.php?user_id=<?=$user_id ?>" method="post" enctype="multipart/form-data" class="avatar_upload">
@@ -77,11 +76,11 @@ if($user_id && isset($user_info)) : // Указан id и информация �
                 </div>
             </div>
             <?php
-            if($user['id'] != $user_id && $user['is_admin'] == 0) :
+            if($user['id'] != $user_id) :
             else:
             ?>
             <div class="account-alert">
-                <a class="nav-link" href="profile/account.php?user_id=<?=$user_info['id'] ?>">Аккаунт</a>
+                <a class="nav-link" href="profile/account.php">Аккаунт</a>
             </div>
 
             <?php endif; ?>
