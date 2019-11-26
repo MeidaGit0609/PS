@@ -1,26 +1,24 @@
     <?php
-    $time = date('His');
+    $currencies = get_currencies(); // Валюты из БД
 
-    // Каждые два часа спаршеные валюты записываються в БД 
-    if(substr($time, 0, 2) % 2 == 0 && substr($time, 2, 2) == 00 && substr($time, 4, 2) == 00) {
+    $time = time();
+    $pub_ago = $time - $currencies[0]['pub_date'];
 
-        include_once '../php/phpQuery-onefile.php';
+    // Каждые два часа
+    if((int)$pub_ago > 60 * 60 * 2) {
+        $root = $_SERVER['DOCUMENT_ROOT'];
+        include_once $root . '/php/phpQuery-onefile.php';
         $html = file_get_contents('https://www.banki.ru/products/currency/cash/maykop/');
         $phpquery = phpQuery::newDocument($html);
-    
+
         // Валюты спаршенные с какого-то сайта
         $dolor = $phpquery->find('table.currency-table__table tbody tr td:eq(1) div:eq(0)')->html();
         $euro  = $phpquery->find('table.currency-table__table tbody tr:eq(1) td:eq(1) div:eq(0)')->html();
 
         // Запись в БД
-        mysqli_query($connection, "UPDATE `currencies` SET `value` = '$dolor' WHERE `currencies`.`title` = 'dolor'");
-        mysqli_query($connection, "UPDATE `currencies` SET `value` = '$euro' WHERE `currencies`.`title` = 'euro'");
-        echo 'ура';
+        mysqli_query($connection, "UPDATE `currencies` SET `value` = '$dolor', `pub_date` = $time WHERE `currencies`.`title` = 'dolor'");
+        mysqli_query($connection, "UPDATE `currencies` SET `value` = '$euro', `pub_date` = $time WHERE `currencies`.`title` = 'euro'");
     }
-
-    $currencies_result = mysqli_query($connection, "SELECT `value` FROM `currencies`");
-    $currencies = mysqli_fetch_all($currencies_result, MYSQLI_ASSOC); // Валюты из БД
-
     ?>
     
     <div class="footer">
@@ -30,7 +28,7 @@
                 <span>&euro; <?=$currencies[1]['value'] ?></span>
             </div>
 
-            <div class="copyright">&copy; Все права пренадлежат студии <span>ptrchoStudio</span></div>
+            <div class="copyright">&copy; Все права пренадлежат <span>ptrchoStudio</span></div>
         </div>
     </div>
 

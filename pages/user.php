@@ -18,11 +18,6 @@ require_once '../includes/header.php';
 $user_id = $_GET['id']; // id эттого юзера
 $user_info = user_by_id($user_id); // Информация об этом юзере
 if($user_id && isset($user_info)) : // Указан id и информация есть
-
-    echo '<pre>';
-    print_r($user);
-    echo '</pre>';
-
 ?>
     <header class="profile-header">
         <div class="container">

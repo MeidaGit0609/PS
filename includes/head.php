@@ -1,3 +1,4 @@
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/php/functions/curriencies_functions.php'; ?>
 <!doctype html>
 <html lang="en">
 <head>
