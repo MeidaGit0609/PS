@@ -26,18 +26,37 @@ function get_users() {
     return $users;
 }
 
-// Ищет пользователя в базе по id
-function get_user_id_by_id($id) {
-    global $connection;
+// Выдаёт пользователей по поиску
+function get_users_by_search($query, $page) {
+    global $connection, $postsOnePage;
 
-    $sql = "SELECT * FROM `users` WHERE `id` = '$id'";
+    $offset = ($page - 1) * $postsOnePage;
+
+    if($offset == 0) {
+        $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT "."5";
+    }
+    else {
+        $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT "."$postsOnePage"." OFFSET "."$offset";
+    }
 
     $result = mysqli_query($connection, $sql);
+    $users  = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    $user = mysqli_fetch_assoc($result);
-
-    return $user;
+    return $users;
 }
+
+// Ищет пользователя в базе по id
+//function get_user_by_id($id) {
+//    global $connection;
+//
+//    $sql = "SELECT * FROM `users` WHERE `id` = '$id'";
+//
+//    $result = mysqli_query($connection, $sql);
+//
+//    $user = mysqli_fetch_assoc($result);
+//
+//    return $user;
+//}
 
 // Ищет пользователя в базе по username'y
 function get_user_id_by_username($username) {

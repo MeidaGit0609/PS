@@ -45,4 +45,11 @@ require_once $config_way;
             <?php endforeach; ?>
         </ul>
     </div>
+
+    <form class="search row no-gutters" action="/pages/search.php" method="get">
+        <div class="col-8">
+            <input type="search" name="query" class="form-control d-inline-block" placeholder="Найти канал..." required value="<?=isset($query) ? $_GET['query'] : '' ?>">
+        </div>
+        <button class="btn btn-md btn-outline-dark d-inline-block">Поиск</button>
+    </form>
 </nav>
