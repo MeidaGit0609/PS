@@ -6,26 +6,40 @@ function add_like($post_id, $user_id, $likes) {
 
     // Проверка наличия лайка
     $sql = "SELECT * FROM `like` WHERE `post_id` = '$post_id' and `user_id` = '$user_id'";
-    $result = mysqli_query($connection, $sql);
-    $is_like = mysqli_num_rows($result) > 0 ? true : false;
+    $result = $connection->prepare($sql);
+    $is_like = $result->rowCount() > 0 ? true : false;
 
     if($is_like == true) {
         // Удаляем лайк
-        mysqli_query($connection, "DELETE FROM `like` WHERE `post_id` = '$post_id' and `user_id` = '$user_id'");
-
+        $result = $connection->prepare("DELETE FROM `like` WHERE `post_id` = :post_id and `user_id` = :user_id");
+        $result->execute([
+            'post_id' => $post_id,
+            'user_id' => $user_id
+        ]);
         $likes -= 1;
 
-        $sql = "UPDATE `posts` SET `likes` = '$likes' WHERE `posts`.`id` = '$post_id';";
-        mysqli_query($connection, $sql);
+        $sql = "UPDATE `posts` SET `likes` = :likes WHERE `posts`.`id` = :post_id;";
+        $result = $connection->prepare($sql);
+        $result->execute([
+            'likes' => $likes,
+            'post_id' => $post_id
+        ]);
     }
     else {
         // Ставим лайк
-        mysqli_query($connection, "INSERT INTO `like` (`post_id`, `user_id`) VALUES('$post_id', '$user_id')");
-
+        $result = $connection->prepare("INSERT INTO `like` (`post_id`, `user_id`) VALUES(:post_id, :user_id)");
+        $result->execute([
+            'post_id' => $post_id,
+            'user_id' => $user_id
+        ]);
         $likes += 1;
 
-        $sql = "UPDATE `posts` SET `likes` = '$likes' WHERE `posts`.`id` = '$post_id';";
-        mysqli_query($connection, $sql);
+        $sql = "UPDATE `posts` SET `likes` = :likes WHERE `posts`.`id` = :post_id;";
+        $result = $connection->prepare($sql);
+        $result->execute([
+            'likes' => $likes,
+            'post_id' => $post_id
+        ]);
     }
 }
 
@@ -34,9 +48,13 @@ function add_like($post_id, $user_id, $likes) {
 function is_like($post_id, $user_id) {
     global  $connection;
 
-    $sql = "SELECT * FROM `like` WHERE `post_id` = '$post_id' and `user_id` = '$user_id'";
-    $result = mysqli_query($connection, $sql);
-    $is_like = mysqli_num_rows($result);
+    $sql = "SELECT * FROM `like` WHERE `post_id` = :post_id and `user_id` = :user_id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'post_id' => $post_id,
+        'user_id' => $user_id
+    ]);
+    $is_like = $result->rowCount();
     $is_like = $is_like > 0 ? true : false;
 
     return $is_like;
@@ -46,9 +64,12 @@ function is_like($post_id, $user_id) {
 function like_num($post_id) {
     global  $connection;
 
-    $sql = "SELECT * FROM `like` WHERE `post_id` = '$post_id'";
-    $result = mysqli_query($connection, $sql);
-    $is_like = mysqli_num_rows($result);
+    $sql = "SELECT * FROM `like` WHERE `post_id` = :post_id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'post_id' => $post_id
+    ]);
+    $is_like = $result->rowCount();
 
     return $is_like;
 }
@@ -57,9 +78,12 @@ function like_num($post_id) {
 function get_like_users($post_id) {
     global $connection;
 
-    $sql           = "SELECT `user_id` FROM `like` WHERE `post_id` = '$post_id' LIMIT 5";
-    $query         = mysqli_query($connection, $sql);
-    $like_users_id = mysqli_fetch_all($query, MYSQLI_ASSOC); // Массив с айдишниками лакнувших людей
+    $sql            = "SELECT `user_id` FROM `like` WHERE `post_id` = :post_id LIMIT 5";
+    $result         = $connection->prepare($sql);
+    $result->execute([
+        'post_id' => $post_id
+    ]);
+    $like_users_id  = $result->fetchAll(); // Массив с айдишниками лакнувших людей
 
     // Циклом записываю данные пользователей(по их id)
     for($i = 0;$i < count($like_users_id);$i++) {

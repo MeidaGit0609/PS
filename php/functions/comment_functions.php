@@ -7,28 +7,39 @@ include_once $root;
 function add_post_comment($post_id, $text, $user_id) {
     global $connection;
 
-    $sql = "INSERT INTO `post_comment` (`post_id`, `text`, `user_id`) VALUES('$post_id', '$text', '$user_id')";
-    mysqli_query($connection, $sql);
+    $sql = "INSERT INTO `post_comment` (`post_id`, `text`, `user_id`) VALUES(:post_id, :text, :user_id)";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'post_id' => $post_id,
+        'text'    => $text,
+        'user_id' => $user_id,
+    ]);
 }
 
 // Выводит коментарии под постом
 function get_post_comment($post_id) {
     global $connection;
 
-    $sql = "SELECT * FROM `post_comment` WHERE `post_id` = '$post_id' ORDER BY `id` DESC";
-    $result = mysqli_query($connection, $sql);
+    $sql = "SELECT * FROM `post_comment` WHERE `post_id` = :post_id ORDER BY `id` DESC";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'post_id' => $post_id
+    ]);
 
-    $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $posts = $result->fetchAll();
     return $posts;
 }
 
 // Считает лайки коммента
-function comments_like_num($comment_id, $user_id) {
+function comments_like_num($comment_id) {
     global $connection;
 
-    $sql        = "SELECT `id` FROM `comment_likes` WHERE `comment_id` = '$comment_id'";
-    $result     = mysqli_query($connection, $sql);
-    $likes_num  = mysqli_num_rows($result);
+    $sql    = "SELECT `id` FROM `comment_likes` WHERE `comment_id` = :comment_id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'comment_id' => $comment_id
+    ]);
+    $likes_num  = $result->rowCount();
 
     return $likes_num;
 }
@@ -37,25 +48,37 @@ function comments_like_num($comment_id, $user_id) {
 function add_comment_like($user_id, $comment_id) {
     global $connection;
 
-    $sql = "INSERT INTO `comment_likes` (`user_id`, `comment_id`) VALUES('$user_id', '$comment_id')";
-    mysqli_query($connection, $sql);
+    $sql = "INSERT INTO `comment_likes` (`user_id`, `comment_id`) VALUES(:user_id, :comment_id)";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'user_id'    => $user_id,
+        'comment_id' => $comment_id
+    ]);
 }
 
 // Удаляет лайк комментария
 function delete_comment_like($user_id, $comment_id) {
     global $connection;
 
-    $sql = "DELETE FROM `comment_likes` WHERE `user_id` = '$user_id' AND `comment_id` = '$comment_id'";
-    mysqli_query($connection, $sql);
+    $sql = "DELETE FROM `comment_likes` WHERE `user_id` = :user_id AND `comment_id` = :comment_id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'user_id'    => $user_id,
+        'comment_id' => $comment_id
+    ]);
 }
 
 // Проверяет лайкнул ли пользователь пост
 function he_like_comment($user_id, $comment_id) {
     global $connection;
 
-    $sql     = "SELECT `id` FROM `comment_likes` WHERE `user_id` = '$user_id' AND `comment_id` = '$comment_id'";
-    $result  = mysqli_query($connection, $sql);
-    $he_like = mysqli_num_rows($result);
+    $sql    = "SELECT `id` FROM `comment_likes` WHERE `user_id` = '$user_id' AND `comment_id` = '$comment_id'";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'user_id'    => $user_id,
+        'comment_id' => $comment_id
+    ]);
+    $he_like = $result->rowCount();
 
     if($he_like > 0) {
         $total = true;
@@ -85,6 +108,9 @@ function comment_num($post_id) {
 function delete_comment($comment_id) {
     global $connection;
 
-    $sql = "DELETE FROM `post_comment` WHERE `post_comment`.`id` = '$comment_id'";
-    mysqli_query($connection, $sql);
+    $sql = "DELETE FROM `post_comment` WHERE `post_comment`.`id` = :comment_id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'comment_id' => $comment_id
+    ]);
 }

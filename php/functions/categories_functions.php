@@ -8,8 +8,8 @@ function get_categories() {
     global $connection;
 
     $sql = "SELECT * FROM `categories`";
-    $result = mysqli_query($connection, $sql);
-    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $result = $connection->prepare($sql);
+    $categories = $result->fetchAll();
 
     return $categories;
 }
