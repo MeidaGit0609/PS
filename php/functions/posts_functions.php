@@ -13,8 +13,13 @@ function add_post($img, $description, $user_id) {
     global $connection;
 
 
-    $sql = "INSERT INTO `posts` (`image`, `description`, `user_id`) VALUES('$img', ' $description', '$user_id')";
-    $result = mysqli_query($connection, $sql);
+    $sql = "INSERT INTO `posts` (`image`, `description`, `user_id`) VALUES(:img, :description, :user_id)";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'img' => $img,
+        'description' => $description,
+        'user_id' => $user_id,
+    ]);
 
     if($result) {
         return 'happy';
@@ -28,11 +33,26 @@ function add_post($img, $description, $user_id) {
 function delete_post($post_id) {
     global $connection;
 
-    $delete_likes_sql = "DELETE FROM `like` WHERE `post_id` = '$post_id'";
-    mysqli_query($connection, $delete_likes_sql);
+    // Удаляю лайки к посту
+    $delete_likes_sql = "DELETE FROM `like` WHERE `post_id` = :post_id";
+    $like_result = $connection->prepare($delete_likes_sql);
+    $like_result->execute([
+        'post_id' => $post_id
+    ]);
 
-    $delete_post_sql = "DELETE FROM `posts` WHERE `id` = '$post_id'";
-    mysqli_query($connection, $delete_post_sql);
+    // Удаляю сам пост
+    $delete_post_sql = "DELETE FROM `posts` WHERE `id` = :post_id";
+    $post_result = $connection->prepare($delete_post_sql);
+    $post_result->execute([
+        'post_id' => $post_id
+    ]);
+
+    // Удаляю комментарии к посту
+    $delete_comments_sql = "DELETE FROM `post_comment` WHERE `post_id` = :post_id";
+    $comments_result = $connection->prepare($delete_comments_sql);
+    $comments_result->execute([
+        'post_id' => $post_id
+    ]);
 }
 
 
@@ -42,9 +62,12 @@ function get_posts($page) {
 
     $offset = ($page - 1) * $postsOnePage;
 
-    $sql = "SELECT * FROM `posts` ORDER BY `views` DESC LIMIT $postsOnePage OFFSET $offset ;";
-    $result = mysqli_query($connection, $sql);
-    $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $sql = "SELECT * FROM `posts` ORDER BY `views` DESC LIMIT $postsOnePage OFFSET ".$offset." ;";
+    $result = $connection->prepare($sql);
+
+    $result->execute();
+
+    $posts = $result->fetchAll();
 
     return $posts;
 }
@@ -68,10 +91,13 @@ function get_subscribes_posts($page, $user_id) {
 
 
         for ($i = 0; $i < count($subscribes_id); $i++) { // По их id ищу их статьи и записываю в массив
-            $sql = "SELECT * FROM `posts` WHERE `user_id` = $subscribes_id[$i] ORDER BY `views` DESC ;";
-            $result = mysqli_query($connection, $sql);
+            $sql = "SELECT * FROM `posts` WHERE `user_id` = :subscribes_id_i ORDER BY `views` DESC ;";
+            $result = $connection->prepare($sql);
+            $result->execute([
+                'subscribes_id_i' => $subscribes_id[$i]
+            ]);
 
-            $posts_one_subscribes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            $posts_one_subscribes = $result->fetchAll();
 
             foreach ($posts_one_subscribes as $post_one_subscribe) {
                 $posts[] = $post_one_subscribe;
@@ -108,9 +134,12 @@ function get_subscribes_posts($page, $user_id) {
 function get_top_posts($num) {
     global $connection;
 
-    $sql = "SELECT * FROM `posts` ORDER BY `likes` DESC LIMIT $num ";
-    $result = mysqli_query($connection, $sql);
-    $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $sql = "SELECT * FROM `posts` ORDER BY `likes` DESC LIMIT :num";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'num' => $num
+    ]);
+    $posts = $result->fetchAll();
 
     return $posts;
 }
@@ -122,9 +151,14 @@ function get_user_posts($page, $user_id) {
 
     $offset = ($page - 1) * $postsOnePage;
 
-    $sql = "SELECT * FROM `posts` WHERE `user_id` = '$user_id' ORDER BY `views` DESC LIMIT $postsOnePage OFFSET $offset ;";
-    $result = mysqli_query($connection, $sql);
-    $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $sql = "SELECT * FROM `posts` WHERE `user_id` = :user_id ORDER BY `views` DESC LIMIT $postsOnePage OFFSET $offset ;";
+
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'user_id' => $user_id
+    ]);
+
+    $posts = $result->fetchAll();
 
     return $posts;
 }
@@ -135,9 +169,12 @@ function get_user_posts($page, $user_id) {
 function get_post_by_id($post_id) {
     global $connection;
 
-    $sql = "SELECT * FROM `posts` WHERE `id` = '$post_id'";
-    $result = mysqli_query($connection, $sql);
-    $post = mysqli_fetch_assoc($result);
+    $sql = "SELECT * FROM `posts` WHERE `id` = :post_id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'post_id' => $post_id
+    ]);
+    $post = $result->fetch(PDO::FETCH_ASSOC);
 
     return $post;
 }
@@ -147,8 +184,8 @@ function posts_num() {
     global $connection;
 
     $sql = "SELECT * FROM `posts`";
-    $result = mysqli_query($connection, $sql);
-    $num_posts = mysqli_num_rows($result);
+    $result = $connection->query($sql);
+    $num_posts = $result->rowCount();
 
     return $num_posts;
 }
@@ -157,9 +194,12 @@ function posts_num() {
 function user_posts_counter($user_id) {
     global $connection;
 
-    $sql = "SELECT * FROM `posts` WHERE `user_id` = '$user_id'";
-    $result = mysqli_query($connection, $sql);
-    $count = mysqli_num_rows($result);
+    $sql = "SELECT * FROM `posts` WHERE `user_id` = :user_id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'user_id' => $user_id
+    ]);
+    $count = $result->rowCount();
 
     return $count;
 }

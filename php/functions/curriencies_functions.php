@@ -7,8 +7,8 @@ function get_currencies() {
     global $connection;
 
     $sql        = "SELECT `value`, `pub_date` FROM `currencies`";
-    $result     = mysqli_query($connection, $sql);
-    $currencies = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $result     = $connection->query($sql);
+    $currencies = $result->fetchAll();
 
     return $currencies;
 }

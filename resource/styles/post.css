@@ -263,9 +263,8 @@
 }
 
 .comments__name {
-    /*margin-bottom: 0;*/
-
-    /*font-size: 20px;*/
+    color: inherit !important;
+    text-decoration: none !important;
 }
 
 .comments__text {

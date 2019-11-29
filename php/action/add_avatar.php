@@ -41,10 +41,11 @@ if(isset($_POST['enter'])) {
         die();
     }
     else {
-        $upload = "../../resource/img/avatars/" . $file['name'];
+        $code = substr(rand(12345678, 657653841123), 2, 50);
+        $upload = "../../resource/img/avatars/" . $file['name'].$code;
         move_uploaded_file($file['tmp_name'], $upload);
 
-        $avatar_way = '/resource/img/avatars/' . $file['name'];
+        $avatar_way = '/resource/img/avatars/' . $file['name'].$code;
         add_avatar($user_id, $avatar_way);
         header($header . 'happy');
     }

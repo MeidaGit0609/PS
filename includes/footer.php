@@ -16,8 +16,19 @@
         $euro  = $phpquery->find('table.currency-table__table tbody tr:eq(1) td:eq(1) div:eq(0)')->html();
 
         // Запись в БД
-        mysqli_query($connection, "UPDATE `currencies` SET `value` = '$dolor', `pub_date` = $time WHERE `currencies`.`title` = 'dolor'");
-        mysqli_query($connection, "UPDATE `currencies` SET `value` = '$euro', `pub_date` = $time WHERE `currencies`.`title` = 'euro'");
+        $query_dolor = $connection->prepare("UPDATE `currencies` SET `value` = :dolor, `pub_date` = :time WHERE `currencies`.`title` = 'dolor'");
+        $query_dolor->execute([
+            'dolor' => $dolor,
+            'time' => $time,
+
+        ]);
+
+        $query_euro = $connection->prepare("UPDATE `currencies` SET `value` = :euro, `pub_date` = :time WHERE `currencies`.`title` = 'euro'");
+        $query_euro->execute([
+            'euro' => $euro,
+            'time' => $time
+        ]);
+
     }
     ?>
     

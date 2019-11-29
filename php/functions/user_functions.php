@@ -10,9 +10,16 @@ function add_user($name_surname, $email, $phone, $username, $password) {
     $email = isset($email) ? $email : 'Email не указан';
     $phone = isset($phone) ? $phone : 'Телефон не указан';
 
-    $sql = "INSERT INTO `users` ( `email`, `phone`, `username`, `password`, `name_surname`) VALUES( '$email', '$phone', '$username', '$password', '$name_surname');";
+    $sql = "INSERT INTO `users` ( `email`, `phone`, `username`, `password`, `name_surname`) VALUES( :email, :phone, :username, :password, :name_surname);";
 
-    mysqli_query($connection, $sql);
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'email' => $email,
+        'phone' => $phone,
+        'username' => $username,
+        'password' => $password,
+        'name_surname' => $name_surname,
+    ]);
 }
 
 // Выдаёт всех пользователей
@@ -20,8 +27,8 @@ function get_users() {
     global $connection;
 
     $sql = "SELECT * FROM `users`";
-    $result = mysqli_query($connection, $sql);
-    $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $result = $connection->query($sql);
+    $users = $result->fetch($result);
 
     return $users;
 }
@@ -30,17 +37,20 @@ function get_users() {
 function get_users_by_search($query, $page) {
     global $connection, $postsOnePage;
 
+    $query = htmlspecialchars($query, ENT_QUOTES);
+
     $offset = ($page - 1) * $postsOnePage;
 
     if($offset == 0) {
-        $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT "."5";
+        $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT 12";
     }
     else {
-        $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE '%$query%' OR `name_surname` LIKE '%$query%' LIMIT "."$postsOnePage"." OFFSET "."$offset";
+        $sql    = "SELECT `username`, `id`, `avatar` FROM `users` WHERE `username` LIKE  '%$query%' OR `name_surname` LIKE  '%$query%' LIMIT $postsOnePage OFFSET  $offset";
     }
 
-    $result = mysqli_query($connection, $sql);
-    $users  = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $result = $connection->query($sql);
+
+    $users = $result->fetchAll();
 
     return $users;
 }
@@ -50,11 +60,14 @@ function get_users_by_search($query, $page) {
 function get_user_id_by_username($username) {
     global $connection;
 
-    $sql = "SELECT `id` FROM `users` WHERE `username` = '$username'";
+    $sql = "SELECT `id` FROM `users` WHERE `username` = :username";
 
-    $result = mysqli_query($connection, $sql);
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'username' => $username
+    ]);
 
-    $user_id = mysqli_fetch_assoc($result);
+    $user_id = $result->fetch();
 
     return $user_id;
 }
@@ -63,14 +76,18 @@ function get_user_id_by_username($username) {
 function auth_user($username, $password) {
     global $connection;
 
-    $sql = "SELECT `id` FROM `users` WHERE `username` = '$username' and `password` = '$password'";
+    $sql = "SELECT `id` FROM `users` WHERE `username` = :username and `password` = :password";
 
-    $result = mysqli_query($connection, $sql);
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'username' => $username,
+        'password' => $password,
+    ]);
 
-    $user = mysqli_num_rows($result);
+    $user = $result->rowCount();
 
     if($user) {
-        return mysqli_fetch_assoc($result);
+        return $result->fetch();
     }
 }
 
@@ -78,9 +95,12 @@ function auth_user($username, $password) {
 function user_by_id($id) {
     global $connection;
 
-    $sql = "SELECT * FROM `users` WHERE `id` = '$id'";
-    $result = mysqli_query($connection, $sql);
-    $user = mysqli_fetch_assoc($result);
+    $sql = "SELECT * FROM `users` WHERE `id` = :id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'id' => $id
+    ]);
+    $user = $result->fetch();
 
     return $user;
 }
@@ -90,8 +110,12 @@ function user_by_id($id) {
 function add_avatar($user_id, $way) {
     global $connection;
 
-    $sql = "UPDATE `users` SET `avatar` = '$way' WHERE `id` = '$user_id';";
-    mysqli_query($connection, $sql);
+    $sql = "UPDATE `users` SET `avatar` = :way WHERE `id` = :user_id;";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'way'     => $way,
+        'user_id' => $user_id,
+    ]);
 }
 
 
@@ -99,8 +123,12 @@ function add_avatar($user_id, $way) {
 function change($new_info, $who, $user_id) {
     global $connection;
 
-    $sql = "UPDATE `users` SET `$who` = '$new_info' WHERE `id` = '$user_id';";
-    mysqli_query($connection, $sql);
+    $sql = "UPDATE `users` SET `$who` = :new_info WHERE `id` = :user_id;";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'new_info' => $new_info,
+        'user_id'  => $user_id,
+    ]);
 }
 
 // Создаёт код для подтверждения пользователя

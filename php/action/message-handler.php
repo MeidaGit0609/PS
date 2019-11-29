@@ -10,7 +10,7 @@ if(count($_POST) > 0) {
     $message      = htmlspecialchars(trim($_POST['message']));
 
     if(strlen($message) < 1) {
-        $header .= '?message=characters_fail';
+        $header .= '&message=characters_fail';
     }
     else {
         add_message($recipient_id, $sender_id, $message);
