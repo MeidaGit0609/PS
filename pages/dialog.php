@@ -30,9 +30,6 @@ if($user_id) : ?>
 
             <?php
             $messages = get_message($recipient_id, $sender_id);
-//            echo '<pre>';
-//            print_r($messages);
-//            echo '</pre>';
             foreach($messages as $message) :
 
             $user_info = user_by_id($message['sender_id']);

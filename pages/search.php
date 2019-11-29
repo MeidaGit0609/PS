@@ -11,8 +11,6 @@ if(isset($_GET['query'])) {
     }
 }
 
-
-
 $current_url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
 require_once '../php/config.php';

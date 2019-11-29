@@ -8,7 +8,7 @@ function get_categories() {
     global $connection;
 
     $sql = "SELECT * FROM `categories`";
-    $result = $connection->prepare($sql);
+    $result = $connection->query($sql);
     $categories = $result->fetchAll();
 
     return $categories;

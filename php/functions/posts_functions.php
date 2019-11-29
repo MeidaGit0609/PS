@@ -33,15 +33,24 @@ function add_post($img, $description, $user_id) {
 function delete_post($post_id) {
     global $connection;
 
+    // Удаляю лайки к посту
     $delete_likes_sql = "DELETE FROM `like` WHERE `post_id` = :post_id";
     $like_result = $connection->prepare($delete_likes_sql);
     $like_result->execute([
         'post_id' => $post_id
     ]);
 
+    // Удаляю сам пост
     $delete_post_sql = "DELETE FROM `posts` WHERE `id` = :post_id";
     $post_result = $connection->prepare($delete_post_sql);
     $post_result->execute([
+        'post_id' => $post_id
+    ]);
+
+    // Удаляю комментарии к посту
+    $delete_comments_sql = "DELETE FROM `post_comment` WHERE `post_id` = :post_id";
+    $comments_result = $connection->prepare($delete_comments_sql);
+    $comments_result->execute([
         'post_id' => $post_id
     ]);
 }
@@ -53,13 +62,10 @@ function get_posts($page) {
 
     $offset = ($page - 1) * $postsOnePage;
 
-    $sql = "SELECT * FROM `posts` ORDER BY `views` DESC LIMIT :postsOnePage OFFSET :offset ;";
+    $sql = "SELECT * FROM `posts` ORDER BY `views` DESC LIMIT $postsOnePage OFFSET ".$offset." ;";
     $result = $connection->prepare($sql);
 
-    $result->execute([
-        'offset'       => $offset,
-        'postsOnePage' => $postsOnePage,
-    ]);
+    $result->execute();
 
     $posts = $result->fetchAll();
 
@@ -145,13 +151,11 @@ function get_user_posts($page, $user_id) {
 
     $offset = ($page - 1) * $postsOnePage;
 
-    $sql = "SELECT * FROM `posts` WHERE `user_id` = :user_id ORDER BY `views` DESC LIMIT :postsOnePage OFFSET :offset ;";
+    $sql = "SELECT * FROM `posts` WHERE `user_id` = :user_id ORDER BY `views` DESC LIMIT $postsOnePage OFFSET $offset ;";
 
     $result = $connection->prepare($sql);
     $result->execute([
-        'user_id' => $user_id,
-        'postsOnePage' => $postsOnePage,
-        'offset' => $offset,
+        'user_id' => $user_id
     ]);
 
     $posts = $result->fetchAll();

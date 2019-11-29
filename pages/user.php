@@ -52,7 +52,7 @@ if($user_id && isset($user_info)) : // Указан id и информация �
                         </div>
 
                         <div class="user__info-item">
-                            Подписчики: <b><?=count_subscribe($user_info['id'], 'subscribe_object'); ?></b>
+                            Подписчики: <b><?php print_r(count_subscribe($user_info['id'], 'subscribe_object')); ?></b>
                         </div>
 
                         <div class="user__info-item">
@@ -148,10 +148,19 @@ if($user_id && isset($user_info)) : // Указан id и информация �
                 </div>
                 <div class="row justify-content-center">
                     <div class="pagination">
+                    <?php $current_url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                    if(stristr($current_url, 'page=') !== false) {
+                        $current_url = explode('page=', $current_url);
+                        $current_url = $current_url[0];
+                    }
+                    else {
+                        $current_url .= '&';
+                    }
+                    ?>
                         <?php if($page < 2) :?>
 
                         <?php else : ?>
-                            <a href="?page=<?=$page - 1;?>" class="pageBtn mr-3">Предыдущая страница </a>
+                            <a href="<?=$current_url ?>page=<?=$page - 1;?>" class="pageBtn mr-3">Предыдущая страница </a>
                         <?php endif; ?>
 
 
@@ -164,7 +173,7 @@ if($user_id && isset($user_info)) : // Указан id и информация �
 
                         <?php else : ?>
                             <?php for($i = 1; $i <= $forLimit;$i++) : ?>
-                                <a href="?page=<?=$i;?>" class="mr-2"><?=$i;?> </a>
+                                <a href="<?=$current_url ?>page=<?=$i;?>" class="mr-2"><?=$i;?> </a>
                             <?php endfor; ?>
                         <?php endif; ?>
 
@@ -172,7 +181,7 @@ if($user_id && isset($user_info)) : // Указан id и информация �
                         <?php if($page == $forLimit || $page > $forLimit) :?>
 
                         <?php else : ?>
-                            <a href="?page=<?=$page + 1;?>" class="pageBtn ml-3">Следующая страница</a>
+                            <a href="<?=$current_url ?>page=<?=$page + 1;?>" class="pageBtn ml-3">Следующая страница</a>
                         <?php endif; ?>
 
 

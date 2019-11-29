@@ -255,7 +255,8 @@ $likes = $post['likes'];
                 </div>
                 <div class="comments__right">
                     <p class="comments__text">
-                        <b class="comments__name"><i><?=substr($comment['datetime'], 0, 10)  ?></i> <?=$user_info['username'] ?></b>
+                        <a href="/pages/user.php?id=<?=$user_info['id']?>" class="comments__name"><b ><i><?=substr($comment['datetime'], 0, 10)  ?></i> <?=$user_info['username'] ?></b></a>
+
                         <?=$comment['text'] ?>
                     </p>
                     <div class="comments__stat">

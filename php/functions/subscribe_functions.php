@@ -81,11 +81,11 @@ function get_subscribes($subscriber_id) {
 function count_subscribe($user_id, $who) {
     global $connection;
 
-    $sql               = "SELECT `id` FROM `subscribes` WHERE `:who` = :user_id";
-    $result            = $connection->prepare($sql);
+    $sql    = "SELECT `id` FROM `subscribes` WHERE `$who` = :user_id";
+    $result = $connection->prepare($sql);
     $result->execute([
-        'user_id' => $user_id,
-        'who'     => $who
+        'user_id' => $user_id
+
     ]);
     $subscribers_count = $result->rowCount();
 
