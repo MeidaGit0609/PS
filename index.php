@@ -9,7 +9,7 @@
 <body>
 <?php require 'includes/header.php'; ?>
 
-<div class="container mt-5" style="margin-top: 300px;">
+<div class="container mt-5" style="">
     <div class="row">
         <?php
         if(isset($_GET['page'])) {
