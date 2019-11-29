@@ -7,9 +7,14 @@ require_once $root;
 function get_message($recipient_id, $sender_id) {
     global $connection;
 
-    $sql = "SELECT * FROM `messages` WHERE `sender_id` = '$sender_id' AND `recipient_id` = '$recipient_id' OR `recipient_id` = '$sender_id' AND `sender_id` = '$recipient_id' ORDER BY `id`";
-    $result = mysqli_query($connection, $sql);
-    $messages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $sql = "SELECT * FROM `messages` WHERE `sender_id` = :sender_id AND `recipient_id` = :recipient_id OR `recipient_id` = :sender_id AND `sender_id` = :recipient_id ORDER BY `id`";
+
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'sender_id' => $sender_id,
+        'recipient_id' => $recipient_id
+    ]);
+    $messages = $result->fetchAll();
 
     return $messages;
 }
@@ -20,17 +25,26 @@ function add_message($recipient_id, $sender_id, $message) {
     global $connection;
 
     $time = date('i H d m Y');
-    $sql  = "INSERT INTO `messages` (`sender_id`, `recipient_id`, `text`, `time`) VALUES('$sender_id', '$recipient_id', '$message', '$time')";
-    mysqli_query($connection, $sql);
+    $sql  = "INSERT INTO `messages` (`sender_id`, `recipient_id`, `text`, `time`) VALUES(:sender_id, :recipient_id, :message, :time)";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'sender_id' => $sender_id,
+        'recipient_id' => $recipient_id,
+        'message' => $message,
+        'time' => $time
+    ]);
 }
 
 // Выдаёт диалоги пользователя
 function get_dialogs($my_id) {
     global $connection;
 
-    $sql = "SELECT * FROM `messages` WHERE `recipient_id` = '$my_id' OR `sender_id` = '$my_id'";
-    $result = mysqli_query($connection, $sql);
-    $messages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $sql = "SELECT * FROM `messages` WHERE `recipient_id` = :my_id OR `sender_id` = :my_id";
+    $result = $connection->prepare($sql);
+    $result->execute([
+        'my_id' => $my_id
+    ]);
+    $messages = $result->fetchAll();
 
     for($i = 0;$i < count($messages);$i++) {
         if($messages[$i]['sender_id'] == $my_id) {
